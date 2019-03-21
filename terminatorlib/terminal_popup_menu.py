@@ -184,7 +184,7 @@ class TerminalPopupMenu(object):
         item.connect('toggled', lambda x: terminal.do_scrollbar_toggle())
         menu.append(item)
 
-        item = gtk.CheckMenuItem(_('Toggle tab visibility'))
+        item = Gtk.CheckMenuItem(_('Toggle tab visibility'))
         item.set_active(terminal.scrollbar.get_property('visible'))
         item.connect('toggled', self.toggle_tab_visibility)
         menu.append(item)
@@ -261,17 +261,17 @@ class TerminalPopupMenu(object):
         terminal = self.terminal
         active_encodings = terminal.config['active_encodings']
         item = Gtk.MenuItem.new_with_mnemonic(_("Encodings"))
-        menu.append (item)
-        submenu = Gtk.Menu ()
-        item.set_submenu (submenu)
-        encodings = TerminatorEncoding ().get_list ()
-        encodings.sort (lambda x, y: cmp (x[2].lower (), y[2].lower ()))
+        menu.append(item)
+        submenu = Gtk.Menu()
+        item.set_submenu(submenu)
+        encodings = TerminatorEncoding().get_list()
+        encodings.sort(lambda x, y: cmp (x[2].lower(), y[2].lower()))
 
-        current_encoding = terminal.vte.get_encoding ()
+        current_encoding = terminal.vte.get_encoding()
         group = None
 
         if current_encoding not in active_encodings:
-            active_encodings.insert (0, _(current_encoding))
+            active_encodings.insert(0, _(current_encoding))
 
         for encoding in active_encodings:
             if encoding == terminal.default_encoding:
