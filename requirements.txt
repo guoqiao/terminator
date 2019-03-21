@@ -1,0 +1,6 @@
+numpy
+borg
+borgbackup
+condor
+configobj
+psutil
