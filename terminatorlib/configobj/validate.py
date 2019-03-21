@@ -751,7 +751,7 @@ def _is_num_param(names, values, to_float=False):
         elif isinstance(val, (int, long, float, basestring)):
             try:
                 out_params.append(fun(val))
-            except ValueError, e:
+            except ValueError as e:
                 raise VdtParamError(name, val)
         else:
             raise VdtParamError(name, val)
@@ -1290,7 +1290,7 @@ def is_mixed_list(value, *args):
     >>> res_str = "'".join(res_seq)
     >>> try:
     ...     vtor.check('mixed_list("yoda")', ('a'))
-    ... except VdtParamError, err:
+    ... except VdtParamError as err:
     ...     str(err) == res_str
     1
     """
@@ -1304,7 +1304,7 @@ def is_mixed_list(value, *args):
         raise VdtValueTooLongError(value)
     try:
         return [fun_dict[arg](val) for arg, val in zip(args, value)]
-    except KeyError, e:
+    except KeyError as e:
         raise VdtParamError('mixed_list', e)
 
 

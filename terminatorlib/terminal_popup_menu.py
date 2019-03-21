@@ -233,7 +233,7 @@ class TerminalPopupMenu(object):
 
             for menuitem in menuitems:
                 menu.append(menuitem)
-        except Exception, ex:
+        except Exception as ex:
             err('TerminalPopupMenu::show: %s' % ex)
 
         menu.show_all()

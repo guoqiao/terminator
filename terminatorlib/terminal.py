@@ -232,7 +232,7 @@ class Terminal(Gtk.VBox):
         try:
             dbg('close: killing %d' % self.pid)
             os.kill(self.pid, signal.SIGHUP)
-        except Exception, ex:
+        except Exception as ex:
             # We really don't want to care if this failed. Deep OS voodoo is
             # not what we should be doing.
             dbg('os.kill failed: %s' % ex)
@@ -317,7 +317,7 @@ class Terminal(Gtk.VBox):
                     dbg('added plugin URL handler for %s (%s) as %d' % 
                         (name, urlplugin.__class__.__name__,
                         self.matches[name]))
-            except Exception, ex:
+            except Exception as ex:
                 err('Exception occurred adding plugin URL match: %s' % ex)
 
     def match_add(self, name, match):
@@ -1484,7 +1484,7 @@ class Terminal(Gtk.VBox):
 %s plugin' % urlplugin.handler_name)
                             url = newurl
                         break
-            except Exception, ex:
+            except Exception as ex:
                 err('Exception occurred preparing URL: %s' % ex)
 
         return(url)

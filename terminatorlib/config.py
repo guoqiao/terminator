@@ -606,7 +606,7 @@ class ConfigBase(Borg):
         dbg('looking for config file: %s' % filename)
         try:
             configfile = open(filename, 'r')
-        except Exception, ex:
+        except Exception as ex:
             if not self.whined:
                 err('ConfigBase::load: Unable to open %s (%s)' % (filename, ex))
                 self.whined = True
@@ -619,7 +619,7 @@ class ConfigBase(Borg):
             parser = ConfigObj(configfile, configspec=configspec)
             validator = Validator()
             result = parser.validate(validator, preserve_errors=True)
-        except Exception, ex:
+        except Exception as ex:
             err('Unable to load configuration: %s' % ex)
             return
 
@@ -671,7 +671,7 @@ class ConfigBase(Borg):
             else:
                 try:
                     section.update(parser[section_name])
-                except KeyError, ex:
+                except KeyError as ex:
                     dbg('ConfigBase::load: skipping missing section %s' %
                             section_name)
 
@@ -714,7 +714,7 @@ class ConfigBase(Borg):
             os.makedirs(config_dir)
         try:
             parser.write(open(self.command_line_options.config, 'w'))
-        except Exception, ex:
+        except Exception as ex:
             err('ConfigBase::save: Unable to save config: %s' % ex)
 
     def get_item(self, key, profile='default', plugin=None, default=None):

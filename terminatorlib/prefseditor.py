@@ -186,7 +186,7 @@ class PrefsEditor:
             librarypath = os.path.join(head, 'preferences.glade')
             gladefile = open(librarypath, 'r')
             gladedata = gladefile.read()
-        except Exception, ex:
+        except Exception as ex:
             print "Failed to find preferences.glade"
             print ex
             return
@@ -209,7 +209,7 @@ class PrefsEditor:
         try:
             self.config.inhibit_save()
             self.set_values()
-        except Exception, e:
+        except Exception as e:
             err('Unable to set values: %s' % e)
         self.config.uninhibit_save()
 

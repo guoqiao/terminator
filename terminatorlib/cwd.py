@@ -66,7 +66,7 @@ def proc_get_pid_cwd(pid, path):
     insert it into, e.g. /proc/%s/cwd"""
     try:
         cwd = os.path.realpath(path % pid)
-    except Exception, ex:
+    except Exception as ex:
         err('Unable to get cwd for PID %s: %s' % (pid, ex))
         cwd = '/'
 

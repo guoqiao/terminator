@@ -38,7 +38,7 @@ class LayoutLauncher:
             librarypath = os.path.join(head, 'layoutlauncher.glade')
             gladefile = open(librarypath, 'r')
             gladedata = gladefile.read()
-        except Exception, ex:
+        except Exception as ex:
             print "Failed to find layoutlauncher.glade"
             print ex
             return
