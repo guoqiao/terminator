@@ -501,7 +501,7 @@ class Terminator(Borg):
             css += template % (munged_profile, bgcolor, bgalpha)
 
         style_provider = Gtk.CssProvider()
-        style_provider.load_from_data(css)
+        style_provider.load_from_data(css.encode('utf8'))
         self.style_providers.append(style_provider)
 
         # Attempt to load some theme specific stylistic tweaks for appearances
@@ -544,7 +544,7 @@ class Terminator(Borg):
                     -GtkPaned-handle-size: %s; }
                 """ % self.config['handle_size']
         style_provider = Gtk.CssProvider()
-        style_provider.load_from_data(css)
+        style_provider.load_from_data(css.encode('utf8'))
         self.style_providers.append(style_provider)
 
         # Apply the providers, incrementing priority so they don't cancel out
