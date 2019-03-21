@@ -689,7 +689,7 @@ class PrefsEditor:
         encodingstore = guiget('EncodingListStore')
         value = self.config['encoding']
         encodings = TerminatorEncoding().get_list()
-        encodings.sort(lambda x, y: cmp(x[2].lower(), y[2].lower()))
+        encodings.sort(key=lambda x: x[2].lower())
 
         for encoding in encodings:
             if encoding[1] is None:

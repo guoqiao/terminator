@@ -265,7 +265,7 @@ class TerminalPopupMenu(object):
         submenu = Gtk.Menu()
         item.set_submenu(submenu)
         encodings = TerminatorEncoding().get_list()
-        encodings.sort(lambda x, y: cmp (x[2].lower(), y[2].lower()))
+        encodings.sort(key=lambda x: x[2].lower())
 
         current_encoding = terminal.vte.get_encoding()
         group = None
