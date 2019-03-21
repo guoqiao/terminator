@@ -12,7 +12,7 @@
 >>> widget.signals.values()
 ['test1']
 >>> signalman.remove_widget(widget)
->>> signalman.cnxids.has_key(widget)
+>>> widget in signalman.cnxids
 False
 >>> widget.signals.values()
 []

@@ -21,11 +21,11 @@ class Signalman(object):
 
     def new(self, widget, signal, handler, *args):
         """Register a new signal on a widget"""
-        if not self.cnxids.has_key(widget):
+        if widget not in self.cnxids:
             dbg('creating new bucket for %s' % type(widget))
             self.cnxids[widget] = {}
 
-        if self.cnxids[widget].has_key(signal):
+        if signal in self.cnxids[widget]:
             err('%s already has a handler for %s' % (id(widget), signal))
 
         self.cnxids[widget][signal] = widget.connect(signal, handler, *args)
@@ -34,10 +34,10 @@ class Signalman(object):
 
     def remove_signal(self, widget, signal):
         """Remove a signal handler"""
-        if not self.cnxids.has_key(widget):
+        if widget not in self.cnxids:
             dbg('%s is not registered' % widget)
             return
-        if not self.cnxids[widget].has_key(signal):
+        if signal not in self.cnxids[widget]:
             dbg('%s not registered for %s' % (signal, type(widget)))
             return
         dbg('removing %s::%s' % (type(widget), signal))
@@ -49,16 +49,16 @@ class Signalman(object):
 
     def remove_widget(self, widget):
         """Remove all signal handlers for a widget"""
-        if not self.cnxids.has_key(widget):
+        if widget not in self.cnxids:
             dbg('%s not registered' % widget)
             return
         signals = self.cnxids[widget].keys()
-        for signal in signals:
+        for signal in list(signals):
             self.remove_signal(widget, signal)
 
     def remove_all(self):
         """Remove all signal handlers for all widgets"""
         widgets = self.cnxids.keys()
-        for widget in widgets:
+        for widget in list(widgets):
             self.remove_widget(widget)
 

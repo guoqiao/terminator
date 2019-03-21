@@ -122,10 +122,8 @@ class Paned(Container):
                     handler = handler[0]
                 self.connect_child(widget, signal, handler, *args)
 
-            if metadata and \
-               metadata.has_key('had_focus') and \
-               metadata['had_focus'] == True:
-                    widget.grab_focus()
+            if metadata and metadata.get('had_focus') == 'True':
+                widget.grab_focus()
 
         elif isinstance(widget, Gtk.Paned):
             try:
@@ -357,7 +355,7 @@ class Paned(Container):
 
     def create_layout(self, layout):
         """Apply layout configuration"""
-        if not layout.has_key('children'):
+        if 'children' not in layout:
             err('layout specifies no children: %s' % layout)
             return
 
@@ -411,7 +409,7 @@ class Paned(Container):
         self.get_child2().create_layout(children[keys[1]])
 
         # Set the position with ratio. For some reason more reliable than by pos.
-        if layout.has_key('ratio'):
+        if 'ratio' in layout:
             self.ratio = float(layout['ratio'])
             self.set_position_by_ratio()
 

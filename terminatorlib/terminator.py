@@ -267,7 +267,7 @@ class Terminator(Borg):
             count = count + 1
             if count == 1000:
                 err('hit maximum loop boundary. THIS IS VERY LIKELY A BUG')
-            for obj in layout.keys():
+            for obj in list(layout.keys()):
                 if layout[obj]['type'].lower() == 'window':
                     hierarchy[obj] = {}
                     hierarchy[obj]['type'] = 'Window'
@@ -275,18 +275,18 @@ class Terminator(Borg):
 
                     # Copy any additional keys
                     for objkey in layout[obj].keys():
-                        if layout[obj][objkey] != '' and not hierarchy[obj].has_key(objkey):
+                        if layout[obj][objkey] != '' and objkey not in hierarchy[obj]:
                             hierarchy[obj][objkey] = layout[obj][objkey]
 
                     objects[obj] = hierarchy[obj]
                     del(layout[obj])
                 else:
                     # Now examine children to see if their parents exist yet
-                    if not layout[obj].has_key('parent'):
+                    if 'parent' not in layout[obj]:
                         err('Invalid object: %s' % obj)
                         del(layout[obj])
                         continue
-                    if objects.has_key(layout[obj]['parent']):
+                    if layout[obj]['parent'] in objects:
                         # Our parent has been created, add ourselves
                         childobj = {}
                         childobj['type'] = layout[obj]['type']
@@ -294,7 +294,7 @@ class Terminator(Borg):
 
                         # Copy over any additional object keys
                         for objkey in layout[obj].keys():
-                            if not childobj.has_key(objkey):
+                            if objkey not in childobj:
                                 childobj[objkey] = layout[obj][objkey]
 
                         objects[layout[obj]['parent']]['children'][obj] = childobj
@@ -309,25 +309,25 @@ class Terminator(Borg):
                 raise(ValueError)
             dbg('Creating a window')
             window, terminal = self.new_window()
-            if layout[windef].has_key('position'):
+            if layout[windef].get('position'):
                 parts = layout[windef]['position'].split(':')
                 if len(parts) == 2:
                     window.move(int(parts[0]), int(parts[1]))
-            if layout[windef].has_key('size'):
+            if layout[windef].get('size'):
                 parts = layout[windef]['size']
                 winx = int(parts[0])
                 winy = int(parts[1])
                 if winx > 1 and winy > 1:
                     window.resize(winx, winy)
-            if layout[windef].has_key('title'):
+            if layout[windef].get('title'):
                 window.title.force_title(layout[windef]['title'])
-            if layout[windef].has_key('maximised'):
+            if layout[windef].get('maximised'):
                 if layout[windef]['maximised'] == 'True':
                     window.ismaximised = True
                 else:
                     window.ismaximised = False
                 window.set_maximised(window.ismaximised)
-            if layout[windef].has_key('fullscreen'):
+            if layout[windef].get('fullscreen'):
                 if layout[windef]['fullscreen'] == 'True':
                     window.isfullscreen = True
                 else:
@@ -474,7 +474,7 @@ class Terminator(Borg):
                 background-color: alpha(%s, %s); }
             """
         profiles = self.config.base.profiles
-        for profile in profiles.keys():
+        for profile in profiles:
             if profiles[profile]['use_theme_colors']:
                 # Create a dummy window/vte and realise it so it has correct
                 # values to read from

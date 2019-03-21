@@ -1701,17 +1701,17 @@ class LayoutEditor:
         command.set_sensitive(True)
         chooser.set_sensitive(True)
         workdir.set_sensitive(True)
-        if layout_item.has_key('command') and layout_item['command'] != '':
+        if layout_item.get('command'):
             command.set_text(layout_item['command'])
         else:
             command.set_text('')
 
-        if layout_item.has_key('profile') and layout_item['profile'] != '':
+        if layout_item.get('profile'):
             chooser.set_active(self.profile_profile_to_ids[layout_item['profile']])
         else:
             chooser.set_active(0)
 
-        if layout_item.has_key('directory') and layout_item['directory'] != '':
+        if layout_item.get('directory'):
             workdir.set_text(layout_item['directory'])
         else:
             workdir.set_text('')

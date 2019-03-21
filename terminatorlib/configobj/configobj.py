@@ -518,10 +518,9 @@ class Section(dict):
         self._initialise()
         # we do this explicitly so that __setitem__ is used properly
         # (rather than just passing to ``dict.__init__``)
-        for entry, value in indict.iteritems():
+        for entry, value in indict.items():
             self[entry] = value
-            
-            
+
     def _initialise(self):
         # the sequence of scalar values in this Section
         self.scalars = []
@@ -732,11 +731,6 @@ class Section(dict):
     def values(self):
         """D.values() -> list of D's values"""
         return [self[key] for key in (self.scalars + self.sections)]
-
-
-    def iteritems(self):
-        """D.iteritems() -> an iterator over the (key, value) items of D"""
-        return iter(self.items())
 
 
     def iterkeys(self):

@@ -88,7 +88,7 @@ class Notebook(Container, Gtk.Notebook):
             if (order_a > order_b):
                 return 1
 
-        if not layout.has_key('children'):
+        if not layout.get('children'):
             err('layout specifies no children: %s' % layout)
             return
 
@@ -122,7 +122,7 @@ class Notebook(Container, Gtk.Notebook):
                 # This page does not yet exist, so make it
                 self.newtab(children[child_key])
                 page = self.get_nth_page(num)
-            if layout.has_key('labels'):
+            if layout.get('labels'):
                 labeltext = layout['labels'][num]
                 if labeltext and labeltext != "None":
                     label = self.get_tab_label(page)
@@ -133,7 +133,7 @@ class Notebook(Container, Gtk.Notebook):
                 self.last_active_term[page] = make_uuid(layout['last_active_term'][num])
             num = num + 1
 
-        if layout.has_key('active_page'):
+        if layout.get('active_page'):
             # Need to do it later, or layout changes result
             GObject.idle_add(self.set_current_page, int(layout['active_page']))
         else:
@@ -278,13 +278,13 @@ class Notebook(Container, Gtk.Notebook):
                     handler = handler[0]
                 self.connect_child(widget, signal, handler, *args)
 
-        if metadata and metadata.has_key('tabnum'):
+        if metadata and metadata.get('tabnum'):
             tabpos = metadata['tabnum']
         else:
             tabpos = -1
 
         label = TabLabel(self.window.get_title(), self)
-        if metadata and metadata.has_key('label'):
+        if metadata and metadata.get('label'):
             dbg('creating TabLabel with text: %s' % metadata['label'])
             label.set_custom_label(metadata['label'])
         label.connect('close-clicked', self.closetab)

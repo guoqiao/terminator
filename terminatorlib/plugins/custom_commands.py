@@ -35,13 +35,13 @@ class CustomCommandsMenu(plugin.MenuItem):
       noord_cmds = []
       for part in sections:
         s = sections[part]
-        if not (s.has_key("name") and s.has_key("command")):
+        if not (s.get("name") and s.get("command")):
           print("CustomCommandsMenu: Ignoring section %s" % s)
           continue
         name = s["name"]
         command = s["command"]
         enabled = s["enabled"] and s["enabled"] or False
-        if s.has_key("position"):
+        if "position" in s:
           self.cmd_list[int(s["position"])] = {'enabled' : enabled,
                                                'name' : name,
                                                'command' : command

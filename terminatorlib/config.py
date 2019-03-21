@@ -300,7 +300,7 @@ class Config(object):
             profile = options.profile
         dbg('Config::set_profile: Changing profile to %s' % profile)
         self.profile = profile
-        if not self.base.profiles.has_key(profile):
+        if profile not in self.base.profiles:
             dbg('Config::set_profile: %s does not exist, creating' % profile)
             self.base.profiles[profile] = copy(DEFAULTS['profiles']['default'])
 
@@ -315,7 +315,7 @@ class Config(object):
             # remove a profile
             err('Config::del_profile: Deleting in-use profile %s.' % profile)
             self.set_profile('default')
-        if self.base.profiles.has_key(profile):
+        if profile in self.base.profiles:
             del(self.base.profiles[profile])
         options = self.options_get()
         if options and options.profile == profile:
@@ -324,7 +324,7 @@ class Config(object):
 
     def rename_profile(self, profile, newname):
         """Rename a profile"""
-        if self.base.profiles.has_key(profile):
+        if profile in self.base.profiles:
             self.base.profiles[newname] = self.base.profiles[profile]
             del(self.base.profiles[profile])
             if profile == self.profile:
@@ -332,7 +332,7 @@ class Config(object):
 
     def list_profiles(self):
         """List all configured profiles"""
-        return(self.base.profiles.keys())
+        return list(self.base.profiles.keys())
 
     def add_layout(self, name, layout):
         """Add a new layout"""
@@ -344,18 +344,18 @@ class Config(object):
 
     def del_layout(self, layout):
         """Delete a layout"""
-        if self.base.layouts.has_key(layout):
+        if layout in self.base.layouts:
             del(self.base.layouts[layout])
 
     def rename_layout(self, layout, newname):
         """Rename a layout"""
-        if self.base.layouts.has_key(layout):
+        if layout in self.base.layouts:
             self.base.layouts[newname] = self.base.layouts[layout]
             del(self.base.layouts[layout])
 
     def list_layouts(self):
         """List all configured layouts"""
-        return(self.base.layouts.keys())
+        return list(self.base.layouts.keys())
 
     def connect_gsetting_callbacks(self):
         """Get system settings and create callbacks for changes"""
@@ -639,12 +639,12 @@ class ConfigBase(Borg):
             if section_name == 'profiles':
                 for profile in parser[section_name]:
                     dbg('ConfigBase::load: Processing profile: %s' % profile)
-                    if not section.has_key(section_name):
+                    if section_name not in section:
                         # FIXME: Should this be outside the loop?
                         section[profile] = copy(DEFAULTS['profiles']['default'])
                     section[profile].update(parser[section_name][profile])
             elif section_name == 'plugins':
-                if not parser.has_key(section_name):
+                if section_name not in parser:
                     continue
                 for part in parser[section_name]:
                     dbg('ConfigBase::load: Processing %s: %s' % (section_name,
@@ -659,7 +659,7 @@ class ConfigBase(Borg):
                            continue
                     section[layout] = parser[section_name][layout]
             elif section_name == 'keybindings':
-                if not parser.has_key(section_name):
+                if section_name not in parser:
                     continue
                 for part in parser[section_name]:
                     dbg('ConfigBase::load: Processing %s: %s' % (section_name,
@@ -719,15 +719,15 @@ class ConfigBase(Borg):
 
     def get_item(self, key, profile='default', plugin=None, default=None):
         """Look up a configuration item"""
-        if not self.profiles.has_key(profile):
+        if profile not in self.profiles:
             # Hitting this generally implies a bug
             profile = 'default'
 
-        if self.global_config.has_key(key):
+        if key in self.global_config:
             dbg('ConfigBase::get_item: %s found in globals: %s' %
                     (key, self.global_config[key]))
             return(self.global_config[key])
-        elif self.profiles[profile].has_key(key):
+        elif key in self.profiles[profile]:
             dbg('ConfigBase::get_item: %s found in profile %s: %s' % (
                     key, profile, self.profiles[profile][key]))
             return(self.profiles[profile][key])
@@ -747,14 +747,14 @@ class ConfigBase(Borg):
         dbg('ConfigBase::set_item: Setting %s=%s (profile=%s, plugin=%s)' %
                 (key, value, profile, plugin))
 
-        if self.global_config.has_key(key):
+        if key in self.global_config:
             self.global_config[key] = value
-        elif self.profiles[profile].has_key(key):
+        elif key in self.profiles[profile]:
             self.profiles[profile][key] = value
         elif key == 'keybindings':
             self.keybindings = value
         elif plugin is not None:
-            if not self.plugins.has_key(plugin):
+            if plugin not in self.plugins:
                 self.plugins[plugin] = {}
             self.plugins[plugin][key] = value
         else:
@@ -764,7 +764,7 @@ class ConfigBase(Borg):
 
     def get_plugin(self, plugin):
         """Return a whole tree for a plugin"""
-        if self.plugins.has_key(plugin):
+        if plugin in self.plugins:
             return(self.plugins[plugin])
 
     def set_plugin(self, plugin, tree):
@@ -799,7 +799,7 @@ class ConfigBase(Borg):
 
     def get_layout(self, layout):
         """Return a layout"""
-        if self.layouts.has_key(layout):
+        if layout in self.layouts:
             return(self.layouts[layout])
         else:
             err('layout does not exist: %s' % layout)

@@ -1645,20 +1645,20 @@ class Terminal(Gtk.VBox):
     def create_layout(self, layout):
         """Apply our layout"""
         dbg('Setting layout')
-        if layout.has_key('command') and layout['command'] != '':
+        if layout.get('command'):
             self.layout_command = layout['command']
-        if layout.has_key('profile') and layout['profile'] != '':
+        if layout.get('profile'):
             if layout['profile'] in self.config.list_profiles():
                 self.set_profile(self, layout['profile'])
-        if layout.has_key('group') and layout['group'] != '':
+        if layout.get('group'):
             # This doesn't need/use self.titlebar, but it's safer than sending
             # None
             self.really_create_group(self.titlebar, layout['group'])
-        if layout.has_key('title') and layout['title'] != '':
+        if layout.get('title'):
             self.titlebar.set_custom_string(layout['title'])
-        if layout.has_key('directory') and layout['directory'] != '':
+        if layout.get('directory'):
             self.directory = layout['directory']
-        if layout.has_key('uuid') and layout['uuid'] != '':
+        if layout.get('uuid'):
             self.uuid = make_uuid(layout['uuid'])
 
     def scroll_by_page(self, pages):
