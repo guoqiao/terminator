@@ -714,15 +714,15 @@ class Terminal(Gtk.VBox):
         if len(colors) == 16:
             # RGB values for indices 16..255 copied from vte source in order to dim them
             shades = [0, 95, 135, 175, 215, 255]
-            for r in xrange(0, 6):
-                for g in xrange(0, 6):
-                    for b in xrange(0, 6):
+            for r in range(0, 6):
+                for g in range(0, 6):
+                    for b in range(0, 6):
                         newcolor = Gdk.RGBA()
                         setattr(newcolor, "red",   shades[r] / 255.0)
                         setattr(newcolor, "green", shades[g] / 255.0)
                         setattr(newcolor, "blue",  shades[b] / 255.0)
                         self.palette_active.append(newcolor)
-            for y in xrange(8, 248, 10):
+            for y in range(8, 248, 10):
                 newcolor = Gdk.RGBA()
                 setattr(newcolor, "red",   y / 255.0)
                 setattr(newcolor, "green", y / 255.0)

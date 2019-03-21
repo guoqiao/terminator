@@ -65,7 +65,7 @@ class Notebook(Container, Gtk.Notebook):
             pos = getattr(Gtk.PositionType, self.config['tab_position'].upper())
             self.set_tab_pos(pos)
 
-        for tab in xrange(0, self.get_n_pages()):
+        for tab in range(0, self.get_n_pages()):
             label = self.get_tab_label(self.get_nth_page(tab))
             label.update_angle()
 
@@ -233,7 +233,7 @@ class Notebook(Container, Gtk.Notebook):
     def get_children(self):
         """Return an ordered list of our children"""
         children = []
-        for page in xrange(0,self.get_n_pages()):
+        for page in range(0,self.get_n_pages()):
             children.append(self.get_nth_page(page))
         return(children)
 
@@ -334,7 +334,7 @@ class Notebook(Container, Gtk.Notebook):
             err('TabLabel::closetab: called on non-Notebook: %s' % widget)
             return
 
-        for i in xrange(0, nb.get_n_pages() + 1):
+        for i in range(0, nb.get_n_pages() + 1):
             if label == nb.get_tab_label(nb.get_nth_page(i)):
                 tabnum = i
                 break
@@ -464,7 +464,7 @@ class Notebook(Container, Gtk.Notebook):
         if self.terminator.doing_layout == True:
             return
         last_active_term = {}
-        for tabnum in xrange(0, self.get_n_pages()):
+        for tabnum in range(0, self.get_n_pages()):
             nth_page = self.get_nth_page(tabnum)
             if nth_page in self.last_active_term:
                 last_active_term[nth_page] = self.last_active_term[nth_page]

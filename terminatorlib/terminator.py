@@ -359,7 +359,7 @@ class Terminator(Borg):
                 # For windows with a notebook
                 notebook = window.get_toplevel().get_children()[0]
                 # Cycle through pages by number
-                for page in xrange(0, notebook.get_n_pages()):
+                for page in range(0, notebook.get_n_pages()):
                     # Try and get the entry in the previously saved mapping
                     mapping = window_last_active_term_mapping[window]
                     page_last_active_term = mapping.get(notebook.get_nth_page(page),  None)
@@ -537,7 +537,7 @@ class Terminator(Borg):
 
         # Size the GtkPaned splitter handle size.
         css = ""
-        if self.config['handle_size'] in xrange(0, 21):
+        if self.config['handle_size'] in range(0, 21):
             css += """
                 .terminator-terminal-window GtkPaned,
                 .terminator-terminal-window paned {
@@ -549,7 +549,7 @@ class Terminator(Borg):
 
         # Apply the providers, incrementing priority so they don't cancel out
         # each other
-        for idx in xrange(0, len(self.style_providers)):
+        for idx in range(0, len(self.style_providers)):
             Gtk.StyleContext.add_provider_for_screen(
                 Gdk.Screen.get_default(),
                 self.style_providers[idx],

@@ -601,7 +601,7 @@ class PrefsEditor:
         # NOTE: The palette selector is set after the colour pickers
         # Palette colour pickers
         colourpalette = self.config['palette'].split(':')
-        for i in xrange(1, 17):
+        for i in range(1, 17):
             widget = guiget('palette_colorpicker_%d' % i)
             widget.set_color(Gdk.color_parse(colourpalette[i - 1]))
         # Now set the palette selector widget
@@ -936,20 +936,20 @@ class PrefsEditor:
         else:
             sensitive = False
 
-        for num in xrange(1, 17):
+        for num in range(1, 17):
             picker = guiget('palette_colorpicker_%d' % num)
             picker.set_sensitive(sensitive)
 
         if value in self.palettes:
             palette = self.palettes[value]
             palettebits = palette.split(':')
-            for num in xrange(1, 17):
+            for num in range(1, 17):
                 # Update the visible elements
                 picker = guiget('palette_colorpicker_%d' % num)
                 picker.set_color(Gdk.color_parse(palettebits[num - 1]))
         elif value == 'custom':
             palettebits = []
-            for num in xrange(1, 17):
+            for num in range(1, 17):
                 picker = guiget('palette_colorpicker_%d' % num)
                 palettebits.append(color2hex(picker))
             palette = ':'.join(palettebits)
@@ -977,7 +977,7 @@ class PrefsEditor:
         guiget = self.builder.get_object
 
         # FIXME: We do this at least once elsewhere. refactor!
-        for num in xrange(1, 17):
+        for num in range(1, 17):
             picker = guiget('palette_colorpicker_%d' % num)
             value = color2hex(picker)
             palettebits.append(value)
