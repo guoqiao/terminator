@@ -151,7 +151,7 @@ class InstallData(install_data):
   def _update_icon_cache(self):
     info("running gtk-update-icon-cache")
     try:
-      subprocess.call(["gtk-update-icon-cache", "-q", "-f", "-t", os.path.join(self.install_dir, "share/icons/hicolor")])
+      subprocess.call(["gtk-update-icon-cache", "-q", "-f", "-t", os.path.join(self.install_dir, "share/icons/hicolor")], shell=True)
     except Exception as e:
       warn("updating the GTK icon cache failed: %s" % str(e))
 
