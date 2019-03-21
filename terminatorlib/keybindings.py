@@ -24,7 +24,7 @@ keyboard shortcuts.
 
 import re
 from gi.repository import Gtk, Gdk
-from util import err
+from .util import err
 
 class KeymapError(Exception):
     """Custom exception for errors in keybinding configurations"""

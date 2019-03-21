@@ -7,10 +7,10 @@ variants"""
 import time
 from gi.repository import GObject, Gtk, Gdk
 
-from util import dbg, err,  enumerate_descendants
-from terminator import Terminator
-from factory import Factory
-from container import Container
+from .util import dbg, err,  enumerate_descendants
+from .terminator import Terminator
+from .factory import Factory
+from .container import Container
 
 # pylint: disable-msg=R0921
 # pylint: disable-msg=E1101

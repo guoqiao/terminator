@@ -74,10 +74,10 @@ KeyError: 'ConfigBase::get_item: unknown key algo'
 import platform
 import os
 from copy import copy
-from configobj.configobj import ConfigObj, flatten_errors
-from configobj.validate import Validator
-from borg import Borg
-from util import dbg, err, DEBUG, get_config_dir, dict_diff
+from .configobj.configobj import ConfigObj, flatten_errors
+from .configobj.validate import Validator
+from .borg import Borg
+from .util import dbg, err, DEBUG, get_config_dir, dict_diff
 
 from gi.repository import Gio
 
@@ -492,7 +492,7 @@ class ConfigBase(Borg):
         Borg.__init__(self, self.__class__.__name__)
 
         self.prepare_attributes()
-        import optionparse
+        from . import optionparse
         self.command_line_options = optionparse.options
         self.load()
 

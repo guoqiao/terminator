@@ -13,19 +13,19 @@ from gi.repository import Vte
 import subprocess
 import urllib
 
-from util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager
-import util
-from config import Config
-from cwd import get_default_cwd
-from factory import Factory
-from terminator import Terminator
-from titlebar import Titlebar
-from terminal_popup_menu import TerminalPopupMenu
-from searchbar import Searchbar
-from translation import _
-from signalman import Signalman
-import plugin
-from terminatorlib.layoutlauncher import LayoutLauncher
+from .util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager
+from . import util
+from .config import Config
+from .cwd import get_default_cwd
+from .factory import Factory
+from .terminator import Terminator
+from .titlebar import Titlebar
+from .terminal_popup_menu import TerminalPopupMenu
+from .searchbar import Searchbar
+from .translation import _
+from .signalman import Signalman
+from . import plugin
+from .layoutlauncher import LayoutLauncher
 
 # pylint: disable-msg=R0904
 class Terminal(Gtk.VBox):

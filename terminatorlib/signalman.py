@@ -3,7 +3,7 @@
 # GPL v2 only
 """Simple management of Gtk Widget signal handlers"""
 
-from util import dbg, err
+from .util import dbg, err
 
 class Signalman(object):
     """Class providing glib signal tracking and management"""

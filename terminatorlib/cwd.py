@@ -15,7 +15,7 @@
 import platform
 import os
 import pwd
-from util import dbg, err
+from .util import dbg, err
 
 try:
     import psutil

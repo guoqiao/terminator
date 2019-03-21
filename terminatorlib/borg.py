@@ -9,7 +9,7 @@ exist to encourage re-use, but I can not find any
 specific licencing terms.
 """
 
-from util import dbg
+from .util import dbg
 
 # pylint: disable-msg=R0903
 # pylint: disable-msg=R0921

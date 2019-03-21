@@ -8,13 +8,13 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Gio
 
-from terminator import Terminator
-from config import Config
-from factory import Factory
-from container import Container
-from editablelabel import EditableLabel
-from translation import _
-from util import err, dbg, enumerate_descendants, make_uuid
+from .terminator import Terminator
+from .config import Config
+from .factory import Factory
+from .container import Container
+from .editablelabel import EditableLabel
+from .translation import _
+from .util import err, dbg, enumerate_descendants, make_uuid
 
 class Notebook(Container, Gtk.Notebook):
     """Class implementing a Gtk.Notebook container"""

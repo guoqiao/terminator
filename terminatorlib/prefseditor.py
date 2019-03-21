@@ -11,14 +11,14 @@ import os
 from gi.repository import GObject, Gtk, Gdk
 import re
 
-from util import dbg, err
-import config
-from keybindings import Keybindings, KeymapError
-from translation import _
-from encoding import TerminatorEncoding
-from terminator import Terminator
-from plugin import PluginRegistry
-from version import APP_NAME
+from .util import dbg, err
+from . import config
+from .keybindings import Keybindings, KeymapError
+from .translation import _
+from .encoding import TerminatorEncoding
+from .terminator import Terminator
+from .plugin import PluginRegistry
+from .version import APP_NAME
 
 def color2hex(widget):
     """Pull the colour values out of a Gtk ColorPicker widget and return them

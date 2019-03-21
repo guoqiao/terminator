@@ -10,13 +10,13 @@ import gi
 from gi.repository import GObject
 from gi.repository import Gtk, Gdk, GdkX11
 
-from util import dbg, err, make_uuid, display_manager
-import util
-from translation import _
-from version import APP_NAME
-from container import Container
-from factory import Factory
-from terminator import Terminator
+from .util import dbg, err, make_uuid, display_manager
+from . import util
+from .translation import _
+from .version import APP_NAME
+from .container import Container
+from .factory import Factory
+from .terminator import Terminator
 
 if display_manager() == 'X11':
     try:

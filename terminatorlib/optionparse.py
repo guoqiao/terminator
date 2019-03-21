@@ -20,11 +20,11 @@ import sys
 import os
 
 from optparse import OptionParser, SUPPRESS_HELP
-from util import dbg, err
-import util
-import config
-import version
-from translation import _
+from .util import dbg, err
+from . import util
+from . import config
+from . import version
+from .translation import _
 
 options = None
 

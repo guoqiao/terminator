@@ -6,11 +6,11 @@
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from factory import Factory
-from config import Config
-from util import dbg, err
-from translation import _
-from signalman import Signalman
+from .factory import Factory
+from .config import Config
+from .util import dbg, err
+from .translation import _
+from .signalman import Signalman
 
 # pylint: disable-msg=R0921
 class Container(object):

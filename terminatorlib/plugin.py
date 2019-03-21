@@ -25,10 +25,10 @@
 
 import sys
 import os
-import borg
-from config import Config
-from util import dbg, err, get_config_dir
-from terminator import Terminator
+from . import borg
+from .config import Config
+from .util import dbg, err, get_config_dir
+from .terminator import Terminator
 
 class Plugin(object):
     """Definition of our base plugin class"""

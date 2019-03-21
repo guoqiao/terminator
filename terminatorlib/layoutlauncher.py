@@ -7,11 +7,11 @@ import os
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from util import dbg, err, spawn_new_terminator
-import config
-from translation import _
-from terminator import Terminator
-from plugin import PluginRegistry
+from .util import dbg, err, spawn_new_terminator
+from . import config
+from .translation import _
+from .terminator import Terminator
+from .plugin import PluginRegistry
 
 class LayoutLauncher:
     """Class implementing the various parts of the preferences editor"""

@@ -8,14 +8,14 @@ import string
 
 from gi.repository import Gtk
 
-from version import APP_NAME
-from translation import _
-from encoding import TerminatorEncoding
-from terminator import Terminator
-from util import err, dbg
-from config import Config
-from prefseditor import PrefsEditor
-import plugin
+from .version import APP_NAME
+from .translation import _
+from .encoding import TerminatorEncoding
+from .terminator import Terminator
+from .util import err, dbg
+from .config import Config
+from .prefseditor import PrefsEditor
+from . import plugin
 
 class TerminalPopupMenu(object):
     """Class implementing the Terminal context menu"""
