@@ -1,28 +1,21 @@
 # Terminator
 
-multi-terminal on steroids.
+Migrate Terminator to Python 3 and Improve.
 
-## Fork on git
+## Install
 
-For those puzzled on bzr (like me) use this fork.
+    git clone https://github.com/guoqiao/terminator.git
+    cd terminator
+    sudo ./apt-install.sh
+    sudo pip3 install -r requirements.txt
+    sudo python3 setup.py install
 
-1. Clone this repo
+## DEBUG
 
-        $ git clone https://github.com/albfan/terminator
+We can use env var to enable debug:
 
-2. Use the script `bzr2git.sh` to update git repo
-
-        $ ./bzr2git.sh
-
-3. You will get a upstream branch with all the changes from bazaar upstream
-
-4. Relaunch that script anytime you want to synchronize with bazaar
+    TERMINATOR_DEBUG=yes ./terminator
 
 ## Official README
 
 [README](README)
-
-## Credits
-
-Chris Jones <cmsj@tenshu.net> and others.
-
