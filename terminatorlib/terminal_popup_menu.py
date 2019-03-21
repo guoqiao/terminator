@@ -4,8 +4,6 @@
 """terminal_popup_menu.py - classes necessary to provide a terminal context 
 menu"""
 
-import string
-
 from gi.repository import Gtk
 
 from .version import APP_NAME
@@ -196,7 +194,7 @@ class TerminalPopupMenu(object):
             item.connect('activate', lambda x: PrefsEditor(self.terminal))
             menu.append(item)
 
-        profilelist = sorted(self.config.list_profiles(), key=string.lower)
+        profilelist = sorted(self.config.list_profiles(), key=lambda s: s.lower())
 
         if len(profilelist) > 1:
             item = Gtk.MenuItem.new_with_mnemonic(_('Profiles'))
