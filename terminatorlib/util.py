@@ -64,14 +64,14 @@ def dbg(log = ""):
         if DEBUGMETHODS != [] and method not in DEBUGMETHODS:
             return
         try:
-            print >> sys.stderr, "%s::%s: %s%s" % (classname, method, log, extra)
+            print("%s::%s: %s%s" % (classname, method, log, extra), file=sys.stderr)
         except IOError:
             pass
 
 def err(log = ""):
     """Print an error message"""
     try:
-        print >> sys.stderr, log
+        print(log, file=sys.stderr)
     except IOError:
         pass
 

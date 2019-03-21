@@ -110,7 +110,7 @@ icon for the window (by file or name)'))
         parser.error('Additional unexpected arguments found: %s' % args)
 
     if options.version:
-        print '%s %s' % (version.APP_NAME, version.APP_VERSION)
+        print('%s %s' % (version.APP_NAME, version.APP_VERSION))
         sys.exit(0)
 
     if options.debug_classes or options.debug_methods:

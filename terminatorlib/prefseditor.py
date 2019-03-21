@@ -187,8 +187,8 @@ class PrefsEditor:
             gladefile = open(librarypath, 'r')
             gladedata = gladefile.read()
         except Exception as ex:
-            print "Failed to find preferences.glade"
-            print ex
+            print("Failed to find preferences.glade")
+            print(ex)
             return
 
         self.builder.add_from_string(gladedata)

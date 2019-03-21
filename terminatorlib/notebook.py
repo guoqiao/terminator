@@ -497,11 +497,11 @@ class Notebook(Container, Gtk.Notebook):
 
     def on_scroll_event(self, notebook, event):
         '''Handle scroll events for scrolling through tabs'''
-        #print "self: %s" % self
-        #print "event: %s" % event
+        #print("self: %s" % self)
+        #print("event: %s" % event)
         child = self.get_nth_page(self.get_current_page())
         if child == None:
-            print "Child = None,  return false"
+            print("Child = None,  return false")
             return False
 
         event_widget = Gtk.get_event_widget(event)
@@ -509,7 +509,7 @@ class Notebook(Container, Gtk.Notebook):
         if event_widget == None or \
            event_widget == child or \
            event_widget.is_ancestor(child):
-            print "event_widget is wrong one,  return false"
+            print("event_widget is wrong one,  return false")
             return False
 
         # Not sure if we need these. I don't think wehave any action widgets

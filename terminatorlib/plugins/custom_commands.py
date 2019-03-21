@@ -36,7 +36,7 @@ class CustomCommandsMenu(plugin.MenuItem):
       for part in sections:
         s = sections[part]
         if not (s.has_key("name") and s.has_key("command")):
-          print "CustomCommandsMenu: Ignoring section %s" % s
+          print("CustomCommandsMenu: Ignoring section %s" % s)
           continue
         name = s["name"]
         command = s["command"]

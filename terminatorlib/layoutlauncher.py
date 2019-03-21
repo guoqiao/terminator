@@ -39,8 +39,8 @@ class LayoutLauncher:
             gladefile = open(librarypath, 'r')
             gladedata = gladefile.read()
         except Exception as ex:
-            print "Failed to find layoutlauncher.glade"
-            print ex
+            print("Failed to find layoutlauncher.glade")
+            print(ex)
             return
 
         self.builder.add_from_string(gladedata)

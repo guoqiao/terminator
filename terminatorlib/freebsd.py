@@ -80,12 +80,12 @@ def get_process_cwd(pid):
 
 if __name__ == '__main__':
   import os, sys
-  print " => %d cwd = %s" % (os.getpid(), get_process_cwd(os.getpid()))
+  print(" => %d cwd = %s" % (os.getpid(), get_process_cwd(os.getpid())))
   for pid in sys.argv:
     try:
       pid = int(pid)
     except:
       pass
     else:
-      print " => %d cwd = %s" % (pid, get_process_cwd(pid))
+      print(" => %d cwd = %s" % (pid, get_process_cwd(pid)))
 
