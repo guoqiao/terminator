@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #    TerminatorVersion - version number
 #    Copyright (C) 2010  cmsj@tenshu.net
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # Terminator by Chris Jones <cmsj@tenshu.net>
 # GPL v2 only
 """custom_commands.py - Terminator Plugin to add custom command menu entries"""
