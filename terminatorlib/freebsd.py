@@ -50,11 +50,11 @@ uintlen = c_size_t(sizeof(c_uint))
 ver = c_uint(0)
 
 if (libc.sysctlbyname('kern.osreldate', byref(ver), byref(uintlen), None, 0) < 0):
-  raise OSError, "sysctlbyname returned < 0"
+  raise OSError("sysctlbyname returned < 0")
 
 # kern.proc.filedesc added for procstat(1) after these __FreeBSD_versions
 if ver.value < 700104 and ver.value < 800019:
-  raise NotImplementedError, "cwd detection requires a recent 7.0-STABLE or 8-CURRENT"
+  raise NotImplementedError("cwd detection requires a recent 7.0-STABLE or 8-CURRENT")
 
 
 def get_process_cwd(pid):

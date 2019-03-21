@@ -53,7 +53,7 @@ class BuildData(build):
           try:
             rc = subprocess.call(['msgfmt', '-o', mo, po])
             if rc != 0:
-              raise Warning, "msgfmt returned %d" % rc
+              raise Warning("msgfmt returned %d" % rc)
           except Exception, e:
             error("Building gettext files failed. Ensure you have gettext installed. Alternatively, try setup.py --without-gettext [build|install]")
             error("Error: %s" % str(e))
