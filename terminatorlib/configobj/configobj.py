@@ -1415,7 +1415,7 @@ class ConfigObj(Section):
                     if not final_encoding:
                         # skip UTF8
                         continue
-                    if infile.startswith(BOM):
+                    if infile.encode('utf8').startswith(BOM):
                         ### BOM discovered
                         ##self.BOM = True
                         # Don't need to remove BOM
@@ -1427,7 +1427,7 @@ class ConfigObj(Section):
             
             # Must be UTF8
             BOM = BOM_SET[enc]
-            if not line.startswith(BOM):
+            if not line.encode('utf8').startswith(BOM):
                 return self._decode(infile, self.encoding)
             
             newline = line[len(BOM):]
@@ -1442,7 +1442,7 @@ class ConfigObj(Section):
         
         # No encoding specified - so we need to check for UTF8/UTF16
         for BOM, (encoding, final_encoding) in BOMS.items():
-            if not line.startswith(BOM):
+            if not line.encode('utf8').startswith(BOM):
                 continue
             else:
                 # BOM discovered
