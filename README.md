@@ -1,14 +1,12 @@
 # Terminator
 
-Migrate Terminator to Python 3 and Improve.
+Migrate Terminator to Python3/GTK3 and Improve.
 
 ## Install
 
     git clone https://github.com/guoqiao/terminator.git
     cd terminator
-    sudo ./apt-install.sh
-    sudo pip3 install -r requirements.txt
-    sudo python3 setup.py install
+    sudo ./install.sh
 
 ## DEBUG
 
