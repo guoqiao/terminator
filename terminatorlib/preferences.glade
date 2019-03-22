@@ -3798,7 +3798,7 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="vbox19">
+                  <object class="GtkBox" id="vbox-manual">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
