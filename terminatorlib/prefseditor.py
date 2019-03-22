@@ -348,18 +348,12 @@ class PrefsEditor:
         layouts = self.config.list_layouts()
         self.layoutiters = {}
         for layout in layouts:
-            if layout == 'default':
-                editable = False
-            else:
-                editable = True
+            editable = (layout != 'default')
             self.layoutiters[layout] = liststore.append([layout, editable])
         selection = widget.get_selection()
         selection.connect('changed', self.on_layout_selection_changed)
         terminator = Terminator()
-        if terminator.layoutname:
-            layout_to_highlight = terminator.layoutname
-        else:
-            layout_to_highlight = 'default'
+        layout_to_highlight = terminator.layoutname or 'default'
         selection.select_iter(self.layoutiters[layout_to_highlight])
         # Now set up the selection changed handler for the layout itself
         widget = guiget('LayoutTreeView')
@@ -410,7 +404,7 @@ class PrefsEditor:
         widget = guiget('entryfilter')
         widget.connect('changed', self.entry_changed)
         selection.connect('changed', self.on_plugin_selection_changed)
-        if len(self.pluginiters) > 0:
+        if self.pluginiters:
             selection.select_iter(liststore.get_iter_first())
 
     def sort_shortcuts(self, treemodel, iter1, iter2, user_data):
@@ -425,7 +419,6 @@ class PrefsEditor:
 
     def entry_changed(self, data):
         self.modelfilter.refilter()
-        return
 
     def match_filter(self, model, iter, udata=None):
         col1 = model.get_value(iter, 0)
@@ -494,12 +487,9 @@ class PrefsEditor:
             guiget('word_chars_hbox').hide()
         # Cursor shape
         widget = guiget('cursor_shape_combobox')
-        if self.config['cursor_shape'] == 'underline':
-            active = 1
-        elif self.config['cursor_shape'] == 'ibeam':
-            active = 2
-        else:
-            active = 0
+        active = {
+            'underline': 1,'ibeam': 2,
+        }.get(self.config['cursor_shape'], 0)
         widget.set_active(active)
         # Cursor blink
         widget = guiget('cursor_blink')
@@ -536,13 +526,11 @@ class PrefsEditor:
         widget.set_text(self.config['custom_command'])
         # Exit action
         widget = guiget('exit_action_combobox')
-        if self.config['exit_action'] == 'restart':
-            widget.set_active(1)
-        elif self.config['exit_action'] == 'hold':
-            widget.set_active(2)
-        else:
-            # Default is to close the terminal
-            widget.set_active(0)
+        active = {
+            'restart': 1,
+            'hold': 2,
+        }.get(self.config['exit_action'], 0)
+        widget.set_active(active)
 
         ## Colors tab
         # Use system colors
@@ -568,17 +556,11 @@ class PrefsEditor:
         # Foreground color
         widget = guiget('foreground_colorpicker')
         widget.set_color(Gdk.color_parse(self.config['foreground_color']))
-        if scheme == 'custom':
-            widget.set_sensitive(True)
-        else:
-            widget.set_sensitive(False)
+        widget.set_sensitive(scheme == 'custom')
         # Background color
         widget = guiget('background_colorpicker')
         widget.set_color(Gdk.color_parse(self.config['background_color']))
-        if scheme == 'custom':
-            widget.set_sensitive(True)
-        else:
-            widget.set_sensitive(False)
+        widget.set_sensitive(scheme == 'custom')
         # Now actually set the scheme
         widget = guiget('color_scheme_combobox')
         widget.set_active(self.colorschemevalues[scheme])
@@ -589,10 +571,7 @@ class PrefsEditor:
             if self.config['palette'].lower() == self.palettes[apalette]:
                 palette = apalette
         if palette not in self.palettevalues:
-            if self.config['palette'] in [None, '']:
-                palette = 'rxvt'
-            else:
-                palette = 'custom'
+            palette = 'custom' if self.config['palette'] else 'rxvt'
         # NOTE: The palette selector is set after the colour pickers
         # Palette colour pickers
         colourpalette = self.config['palette'].split(':')
@@ -656,28 +635,20 @@ class PrefsEditor:
         widget.set_active(self.config['scroll_on_keystroke'])
 
         ## Compatibility tab
+        bindings = {
+            'automatic': 0,
+            'control-h': 1,
+            'ascii-del': 2,
+            'escape-sequence': 3,
+        }
         # Backspace key
         widget = guiget('backspace_binding_combobox')
         value = self.config['backspace_binding']
-        if value == 'control-h':
-            widget.set_active(1)
-        elif value == 'ascii-del':
-            widget.set_active(2)
-        elif value == 'escape-sequence':
-            widget.set_active(3)
-        else:
-            widget.set_active(0)
+        widget.set_active(bindings.get(value, 0))
         # Delete key
         widget = guiget('delete_binding_combobox')
         value = self.config['delete_binding']
-        if value == 'control-h':
-            widget.set_active(1)
-        elif value == 'ascii-del':
-            widget.set_active(2)
-        elif value == 'escape-sequence':
-            widget.set_active(3)
-        else:
-            widget.set_active(0)
+        widget.set_active(bindings.get(value, 0))
         # Encoding
         rowiter = None
         widget = guiget('encoding_combobox')
@@ -889,10 +860,7 @@ class PrefsEditor:
         """Scrollback infiniteness changed"""
         spinbutton = self.builder.get_object('scrollback_lines_spinbutton')
         value = widget.get_active()
-        if value == True:
-            spinbutton.set_sensitive(False)
-        else:
-            spinbutton.set_sensitive(True)
+        spinbutton.set_sensitive(not value)
         self.config['scrollback_infinite'] = value
         self.config.save()
 
@@ -911,25 +879,21 @@ class PrefsEditor:
     def on_darken_background_scale_value_changed(self, widget):
         """Background darkness setting changed"""
         value = widget.get_value()  # This one is rounded according to the UI.
-        if value > 1.0:
-          value = 1.0
-        self.config['background_darkness'] = value
+        self.config['background_darkness'] = min(value, 1.0)
         self.config.save()
 
     def on_palette_combobox_changed(self, widget):
         """Palette selector changed"""
-        value = None
+        value = ''
         guiget = self.builder.get_object
         active = widget.get_active()
 
         for key in self.palettevalues.keys():
             if self.palettevalues[key] == active:
                 value = key
+                break
 
-        if value == 'custom':
-            sensitive = True
-        else:
-            sensitive = False
+        sensitive = (value == 'custom')
 
         for num in range(1, 17):
             picker = guiget('palette_colorpicker_%d' % num)
@@ -1088,8 +1052,7 @@ class PrefsEditor:
     def on_inactive_color_offset_value_changed(self, widget):
         """Inactive color offset setting changed"""
         value = widget.get_value()  # This one is rounded according to the UI.
-        if value > 1.0:
-          value = 1.0
+        value = min(value, 1.0)
         self.config['inactive_color_offset'] = value
         self.config.save()
         guiget = self.builder.get_object
@@ -1099,9 +1062,7 @@ class PrefsEditor:
     def on_handlesize_value_changed(self, widget):
         """Handle size changed"""
         value = widget.get_value()  # This one is rounded according to the UI.
-        value = int(value)          # Cast to int.
-        if value > 20:
-            value = 20
+        value = min(int(value), 20)          # Cast to int.
         self.config['handle_size'] = value
         self.config.save()
         guiget = self.builder.get_object
@@ -1341,20 +1302,13 @@ class PrefsEditor:
         guiget = self.builder.get_object
 
         # Background type
-        backtype = None
         imagewidget = guiget('image_radiobutton')
         transwidget = guiget('transparent_radiobutton')
-        if transwidget.get_active() == True:
-            backtype = 'transparent'
-        else:
-            backtype = 'solid'
+        backtype = 'transparent' if transwidget.get_active() else 'solid'
         self.config['background_type'] = backtype
         self.config.save()
 
-        if backtype in ('transparent', 'image'):
-            guiget('darken_background_scale').set_sensitive(True)
-        else:
-            guiget('darken_background_scale').set_sensitive(False)
+        guiget('darken_background_scale').set_sensitive(backtype in ('transparent', 'image'))
 
     def on_profile_selection_changed(self, selection):
         """A different profile was selected"""
@@ -1370,10 +1324,7 @@ class PrefsEditor:
         self.previous_profile_selection = profile
 
         widget = self.builder.get_object('profileremovebutton')
-        if profile == 'default':
-            widget.set_sensitive(False)
-        else:
-            widget.set_sensitive(True)
+        widget.set_sensitive(profile != 'default')
 
     def on_plugin_selection_changed(self, selection):
         """A different plugin was selected"""
@@ -1407,7 +1358,7 @@ class PrefsEditor:
         # Update the treeview
         model[path][1] = self.plugins[plugin]
 
-        enabled_plugins = [x for x in self.plugins if self.plugins[x] == True]
+        enabled_plugins = [x for x in self.plugins if self.plugins[x]]
         self.config['enabled_plugins'] = enabled_plugins
         self.config.save()
 
@@ -1422,8 +1373,7 @@ class PrefsEditor:
         oldname = cell.get_property('text')
         if oldname == newtext or oldname == 'default':
             return
-        dbg('PrefsEditor::on_profile_name_edited: Changing %s to %s' %
-        (oldname, newtext))
+        dbg('PrefsEditor::on_profile_name_edited: Changing %s to %s' % (oldname, newtext))
         self.config.rename_profile(oldname, newtext)
         self.config.save()
 
@@ -1477,13 +1427,14 @@ class PrefsEditor:
 
     def on_color_scheme_combobox_changed(self, widget):
         """Update the fore/background colour pickers"""
-        value = None
+        value = ''
         guiget = self.builder.get_object
         active = widget.get_active()
 
         for key in self.colorschemevalues.keys():
             if self.colorschemevalues[key] == active:
                 value = key
+                break
 
         fore = guiget('foreground_colorpicker')
         back = guiget('background_colorpicker')
@@ -1602,7 +1553,7 @@ class LayoutEditor:
 
         children = layout.keys()
         i = 0
-        while children != []:
+        while children:
             child = children.pop()
             child_type = layout[child]['type']
             parent = layout[child]['parent']
@@ -1658,10 +1609,7 @@ class LayoutEditor:
         self.previous_layout_selection = layout
 
         widget = self.builder.get_object('layoutremovebutton')
-        if layout == 'default':
-            widget.set_sensitive(False)
-        else:
-            widget.set_sensitive(True)
+        widget.set_sensitive(layout != 'default')
 
         command = self.builder.get_object('layout_profile_command')
         chooser = self.builder.get_object('layout_profile_chooser')
@@ -1696,20 +1644,14 @@ class LayoutEditor:
         command.set_sensitive(True)
         chooser.set_sensitive(True)
         workdir.set_sensitive(True)
-        if layout_item.get('command'):
-            command.set_text(layout_item['command'])
-        else:
-            command.set_text('')
+        command.set_text(layout_item.get('command', ''))
 
         if layout_item.get('profile'):
             chooser.set_active(self.profile_profile_to_ids[layout_item['profile']])
         else:
             chooser.set_active(0)
 
-        if layout_item.get('directory'):
-            workdir.set_text(layout_item['directory'])
-        else:
-            workdir.set_text('')
+        workdir.set_text(layout_item.get('directory', ''))
 
     def on_layout_profile_chooser_changed(self, widget):
         """A new profile has been selected for this item"""
