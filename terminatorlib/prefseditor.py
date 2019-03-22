@@ -395,7 +395,7 @@ class PrefsEditor:
 
         self.modelfilter = liststore.filter_new()
         self.modelfilter.set_visible_func(self.match_filter)
-        self.sortmodelfilter = gtk.TreeModelSort(self.modelfilter)
+        self.sortmodelfilter = Gtk.TreeModelSort(self.modelfilter)
         self.sortmodelfilter.set_sort_func(2, self.sort_shortcuts, None)
         widget.set_model(self.sortmodelfilter)
         selection = widget.get_selection()
@@ -427,7 +427,8 @@ class PrefsEditor:
         mods1 = treemodel.get_value(iter1, 3)
         key2 = treemodel.get_value(iter2, 2)
         mods2 = treemodel.get_value(iter2, 3)
-        return cmp(gtk.accelerator_get_label(key1, mods1), gtk.accelerator_get_label(key2, mods2))
+
+        return cmp(Gtk.accelerator_get_label(key1, mods1), Gtk.accelerator_get_label(key2, mods2))
 
     def entry_changed(self, data):
         self.modelfilter.refilter()
@@ -443,7 +444,7 @@ class PrefsEditor:
         widget = guiget('entryfilter')
         filter_text = widget.get_text()
         check = lambda col: col != None and bool(re.match(r'.*('+filter_text+r')', str(col), re.I))
-        accel = gtk.accelerator_get_label(key, mods)
+        accel = Gtk.accelerator_get_label(key, mods)
         return check(col1) or check(col2) or check(accel)
 
     def set_profile_values(self, profile):
