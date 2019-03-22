@@ -192,7 +192,7 @@ class PrefsEditor:
             return
 
         self.builder.add_from_string(gladedata)
-        self.window = self.builder.get_object('prefswin')
+        self.window = self.builder.get_object('win_prefs')
 
         icon_theme = Gtk.IconTheme.get_default()
         if icon_theme.lookup_icon('terminator-preferences', 48, 0):
