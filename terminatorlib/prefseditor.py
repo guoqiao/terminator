@@ -428,6 +428,8 @@ class PrefsEditor:
         key2 = treemodel.get_value(iter2, 2)
         mods2 = treemodel.get_value(iter2, 3)
 
+        mods1 = Gdk.ModifierType(mods1)
+        mods2 = Gdk.ModifierType(mods2)
         return cmp(Gtk.accelerator_get_label(key1, mods1), Gtk.accelerator_get_label(key2, mods2))
 
     def entry_changed(self, data):
@@ -444,6 +446,7 @@ class PrefsEditor:
         widget = guiget('entryfilter')
         filter_text = widget.get_text()
         check = lambda col: col != None and bool(re.match(r'.*('+filter_text+r')', str(col), re.I))
+        mods = Gdk.ModifierType(mods)
         accel = Gtk.accelerator_get_label(key, mods)
         return check(col1) or check(col2) or check(accel)
 
