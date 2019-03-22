@@ -180,18 +180,9 @@ class PrefsEditor:
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain(APP_NAME)
         self.keybindings = Keybindings()
-        try:
-            # Figure out where our library is on-disk so we can open our
-            (head, _tail) = os.path.split(config.__file__)
-            librarypath = os.path.join(head, 'preferences.glade')
-            gladefile = open(librarypath, 'r')
-            gladedata = gladefile.read()
-        except Exception as ex:
-            print("Failed to find preferences.glade")
-            print(ex)
-            return
-
-        self.builder.add_from_string(gladedata)
+        root = os.path.dirname(config.__file__)
+        glade = os.path.join(root, 'preferences.glade')
+        self.builder.add_from_file(glade)
         self.window = self.builder.get_object('win_prefs')
 
         icon_theme = Gtk.IconTheme.get_default()
