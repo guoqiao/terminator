@@ -2,9 +2,10 @@
 # Terminator by Chris Jones <cmsj@tenshu.net>
 # GPL v2 only
 """container.py - classes necessary to contain Terminal widgets"""
+import gi
+gi.require_version('Gtk', '3.0')
 
-from gi.repository import GObject
-from gi.repository import Gtk
+from gi.repository import GObject, Gtk
 
 from .factory import Factory
 from .config import Config

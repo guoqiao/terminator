@@ -6,12 +6,13 @@
 from __future__ import division
 import os
 import signal
-import gi
-from gi.repository import GLib, GObject, Pango, Gtk, Gdk
-gi.require_version('Vte', '2.91')  # vte-0.38 (gnome-3.14)
-from gi.repository import Vte
-import subprocess
 import urllib
+import subprocess
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Vte', '2.91')
+from gi.repository import GLib, GObject, Pango, Gtk, Gdk, Vte
 
 from .util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager
 from . import util

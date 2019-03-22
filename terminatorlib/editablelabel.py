@@ -18,6 +18,8 @@
 #    , Boston, MA  02110-1301  USA
 
 """ Editable Label class"""
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import GLib, GObject, Gtk, Gdk
 
 class EditableLabel(Gtk.EventBox):

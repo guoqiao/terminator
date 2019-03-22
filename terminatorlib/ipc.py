@@ -2,8 +2,11 @@
 # Terminator by Chris Jones <cmsj@tenshu.net>
 # GPL v2 only
 """ipc.py - DBus server and API calls"""
+import gi
+gi.require_version('Gtk', '3.0')
 
 from gi.repository import Gdk
+
 import dbus.service
 from dbus.exceptions import DBusException
 import dbus.glib

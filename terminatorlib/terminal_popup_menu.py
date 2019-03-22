@@ -4,6 +4,8 @@
 """terminal_popup_menu.py - classes necessary to provide a terminal context 
 menu"""
 
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from .version import APP_NAME

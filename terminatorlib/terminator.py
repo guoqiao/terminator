@@ -3,9 +3,11 @@
 # GPL v2 only
 """terminator.py - class for the master Terminator singleton"""
 
-import copy
 import os
+import copy
+
 import gi
+gi.require_version('Gtk', '3.0')
 gi.require_version('Vte', '2.91')
 from gi.repository import Gtk, Gdk, Vte, GdkX11
 from gi.repository.GLib import GError

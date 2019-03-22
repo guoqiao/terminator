@@ -5,6 +5,9 @@
 variants"""
 
 import time
+
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import GObject, Gtk, Gdk
 
 from .util import dbg, err,  enumerate_descendants

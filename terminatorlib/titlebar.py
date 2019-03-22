@@ -2,12 +2,12 @@
 # Terminator by Chris Jones <cmsj@tenshu.net>
 # GPL v2 only
 """titlebar.py - classes necessary to provide a terminal title bar"""
-
-from gi.repository import Gtk, Gdk
-from gi.repository import GObject
-from gi.repository import Pango
 import random
 import itertools
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, GObject, Pango
 
 from .version import APP_NAME
 from .util import dbg

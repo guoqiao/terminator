@@ -2,10 +2,10 @@
 # Terminator by Chris Jones <cmsj@tenshu.net>
 # GPL v2 only
 """searchbar.py - classes necessary to provide a terminal search bar"""
+import gi
+gi.require_version('Gtk', '3.0')
 
-from gi.repository import Gtk, Gdk
-from gi.repository import GObject
-from gi.repository import GLib
+from gi.repository import GObject, GLib, Gtk, Gdk
 
 from .translation import _
 from .config import Config
