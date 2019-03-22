@@ -3580,7 +3580,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHButtonBox" id="hbuttonbox2">
+                  <object class="GtkButtonBox" id="hbuttonbox2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="layout_style">end</property>
@@ -3897,7 +3897,7 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox" id="dialog_action_area1">
+          <object class="GtkButtonBox" id="dialog_action_area2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">6</property>
