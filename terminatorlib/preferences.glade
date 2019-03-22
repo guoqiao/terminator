@@ -353,31 +353,31 @@
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.20000000000000001</property>
   </object>
-  <object class="GtkWindow" id="prefswin">
+  <object class="GtkWindow" id="win_prefs">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Terminator Preferences</property>
     <property name="default_width">640</property>
     <property name="default_height">400</property>
     <child>
-      <object class="GtkBox" id="dialog_vbox1">
+      <object class="GtkBox" id="box_main">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkNotebook" id="notebook1">
+          <object class="GtkNotebook" id="nb_main">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkBox" id="vbox5">
+              <object class="GtkBox" id="box_global">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">18</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
-                  <object class="GtkBox" id="vbox17">
+                  <object class="GtkBox" id="box_behavior">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -768,7 +768,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="vbox16">
+                  <object class="GtkBox" id="box_appearance">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -1038,7 +1038,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="vbox15">
+                  <object class="GtkBox" id="box_titlebar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -1355,7 +1355,7 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="label_global">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Global</property>
@@ -1365,20 +1365,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkPaned" id="hpaned4">
+              <object class="GtkPaned" id="paned_profiles">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="border_width">18</property>
                 <property name="position">150</property>
                 <property name="position_set">True</property>
                 <child>
-                  <object class="GtkBox" id="vbox1">
+                  <object class="GtkBox" id="box_profiles">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow3">
+                      <object class="GtkScrolledWindow" id="sw_profiles">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
@@ -3198,7 +3198,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="label_profiles">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Profiles</property>
@@ -3209,20 +3209,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkPaned" id="hpaned1">
+              <object class="GtkPaned" id="paned_layouts">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="border_width">18</property>
                 <property name="position">150</property>
                 <property name="position_set">True</property>
                 <child>
-                  <object class="GtkBox" id="vbox2">
+                  <object class="GtkBox" id="box_layouts">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow4">
+                      <object class="GtkScrolledWindow" id="sw_layouts">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
@@ -3487,7 +3487,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel" id="label_layouts">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Layouts</property>
@@ -3498,7 +3498,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="vbox19">
+              <object class="GtkBox" id="box_keybindings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
@@ -3600,7 +3600,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="label_keybindings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Keybindings</property>
@@ -3611,7 +3611,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkPaned" id="hpaned3">
+              <object class="GtkPaned" id="paned_plugins">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="position">200</property>
@@ -3679,7 +3679,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label5">
+              <object class="GtkLabel" id="label_plugins">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Plugins</property>
@@ -3690,7 +3690,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="grid7">
+              <object class="GtkGrid" id="grid_about">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
@@ -3699,7 +3699,7 @@
                 <property name="row_spacing">12</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkImage" id="image1">
+                  <object class="GtkImage" id="img_logo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
@@ -3713,16 +3713,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="hbox13">
+                  <object class="GtkBox" id="box_brand">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkBox" id="vbox18">
+                      <object class="GtkBox" id="box_vision">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel" id="label25">
+                          <object class="GtkLabel" id="label_placeholder">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -3733,7 +3733,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label26">
+                          <object class="GtkLabel" id="label_brand">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Terminator</property>
@@ -3780,7 +3780,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label27">
+                  <object class="GtkLabel" id="label_vision">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">The goal of this project is to produce a useful tool for arranging terminals. It is inspired by programs such as gnome-multi-term, quadkonsole, etc. in that the main focus is arranging terminals in grids (tabs is the most common default method, which Terminator also supports).
@@ -3804,7 +3804,7 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
                     <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkButton" id="button1">
+                      <object class="GtkButton" id="btn_manual">
                         <property name="label" translatable="yes">The Manual</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -3821,7 +3821,7 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label29">
+                      <object class="GtkLabel" id="label_links">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label" translatable="yes">&lt;a href="http://gnometerminator.blogspot.com/p/introduction.html"&gt;Homepage&lt;/a&gt;
@@ -3851,7 +3851,7 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label24">
+              <object class="GtkLabel" id="label_about">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">About</property>
@@ -3869,13 +3869,13 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox" id="dialog_action_area2">
+          <object class="GtkButtonBox" id="btnbox_help">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">6</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkButton" id="helpbutton">
+              <object class="GtkButton" id="btn_help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -3890,7 +3890,7 @@ Much of the behavior of Terminator is based on GNOME Terminal, and we are adding
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="okbutton">
+              <object class="GtkButton" id="btn_ok">
                 <property name="label">gtk-close</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
