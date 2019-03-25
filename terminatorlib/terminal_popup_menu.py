@@ -69,8 +69,7 @@ class TerminalPopupMenu(object):
                     if terminal.matches[pluginname] == url[1]:
                         break
 
-                dbg("Found match ID (%d) in terminal.matches plugin %s" %
-                        (url[1], pluginname))
+                dbg("Found match ID (%d) in terminal.matches plugin %s" % (url[1], pluginname))
                 registry = plugin.PluginRegistry()
                 registry.load_plugins()
                 plugins = registry.get_plugins_by_capability('url_handler')
