@@ -297,7 +297,7 @@ def make_uuid(str_uuid=None):
 
 def inject_uuid(target):
     """Inject a UUID into an existing object"""
-    if getattr(target, "uuid"):
+    if getattr(target, "uuid", None):
         dbg("Object already has a UUID: %s" % target)
     else:
         target.uuid = make_uuid()
