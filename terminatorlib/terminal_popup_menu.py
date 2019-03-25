@@ -128,19 +128,16 @@ class TerminalPopupMenu(object):
             item.set_image(image)
             if hasattr(item, 'set_always_show_image'):
                 item.set_always_show_image(True)
-            item.connect('activate', lambda x: terminal.emit('split-vert',
-                self.terminal.get_cwd()))
+            item.connect('activate', lambda x: terminal.emit('split-vert', self.terminal.get_cwd()))
             menu.append(item)
 
             item = Gtk.MenuItem.new_with_mnemonic(_('Open _Tab'))
-            item.connect('activate', lambda x: terminal.emit('tab-new', False,
-                terminal))
+            item.connect('activate', lambda x: terminal.emit('tab-new', False, terminal))
             menu.append(item)
 
             if self.terminator.debug_address is not None:
                 item = Gtk.MenuItem.new_with_mnemonic(_('Open _Debug Tab'))
-                item.connect('activate', lambda x:
-                        terminal.emit('tab-new', True, terminal))
+                item.connect('activate', lambda x: terminal.emit('tab-new', True, terminal))
                 menu.append(item)
 
             menu.append(Gtk.SeparatorMenuItem())
