@@ -80,17 +80,6 @@ class Notebook(Container, Gtk.Notebook):
 
     def create_layout(self, layout):
         """Apply layout configuration"""
-        def child_compare(a, b):
-            order_a = children[a]['order']
-            order_b = children[b]['order']
-
-            if (order_a == order_b):
-                return 0
-            if (order_a < order_b):
-                return -1
-            if (order_a > order_b):
-                return 1
-
         if not layout.get('children'):
             err('layout specifies no children: %s' % layout)
             return
@@ -102,8 +91,7 @@ class Notebook(Container, Gtk.Notebook):
             return
 
         num = 0
-        keys = children.keys()
-        keys.sort(child_compare)
+        keys = sorted(children.keys(), key=lambda x: x['order'])
 
         for child_key in keys:
             child = children[child_key]
@@ -437,7 +425,8 @@ class Notebook(Container, Gtk.Notebook):
             del(self)
             # Find the last terminal in the new parent and give it focus
             terms = parent.get_visible_terminals()
-            terms.keys()[-1].grab_focus()
+            # TODO: need to sort
+            list(terms.keys())[-1].grab_focus()
 
     def page_num_descendant(self, widget):
         """Find the tabnum of the tab containing a widget at any level"""
