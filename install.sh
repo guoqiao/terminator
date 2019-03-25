@@ -1,17 +1,20 @@
 #!/bin/bash
-
 set -xue
 
-sudo apt update -y
-sudo apt install -y \
-    intltool \
-    libkeybinder-dev \
-    libkeybinder-3.0-dev \
-    python-keybinder \
-    python-vte
+sudo pip3 install -r requirements.txt
 
-sudo /usr/bin/pip3 install -r requirements.txt
-
-sudo /usr/bin/python3 setup.py build --verbose
-
-sudo /usr/bin/python3 setup.py install --verbose --record=install-files.txt
+if (which brew); then
+    brew install \
+        pygobject3 \
+        vte3 \
+        gtk+3
+elif (which apt-get); then
+    sudo apt-get update -y
+    sudo apt-get install -y \
+        intltool \
+        libkeybinder-dev \
+        libkeybinder-3.0-dev \
+        python-keybinder \
+        python-vte
+    sudo python3 setup.py install --verbose --record=install-files.txt
+fi
