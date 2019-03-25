@@ -219,21 +219,17 @@ class TerminalPopupMenu(object):
 
         self.add_encoding_items(menu)
 
-        try:
-            menuitems = []
-            registry = plugin.PluginRegistry()
-            registry.load_plugins()
-            plugins = registry.get_plugins_by_capability('terminal_menu')
-            for menuplugin in plugins:
-                menuplugin.callback(menuitems, menu, terminal)
-            
-            if len(menuitems) > 0:
-                menu.append(Gtk.SeparatorMenuItem())
+        menuitems = []
+        registry = plugin.PluginRegistry()
+        registry.load_plugins()
+        plugins = registry.get_plugins_by_capability('terminal_menu')
+        for menuplugin in plugins:
+            menuplugin.callback(menuitems, menu, terminal)
+        if menuitems:
+            menu.append(Gtk.SeparatorMenuItem())
 
-            for menuitem in menuitems:
-                menu.append(menuitem)
-        except Exception as ex:
-            err('TerminalPopupMenu::show: %s' % ex)
+        for menuitem in menuitems:
+            menu.append(menuitem)
 
         menu.show_all()
         menu.popup(None, None, None, None, button, time)
