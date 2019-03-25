@@ -120,7 +120,7 @@ for %s' % (len(self.instances), capability))
     def is_enabled(self, plugin):
         """Return a boolean value indicating whether a plugin is enabled or
         not"""
-        return plugin in self.instances()
+        return plugin in self.instances
 
     def enable(self, plugin):
         """Enable a plugin"""
