@@ -67,19 +67,21 @@ KeyError: 'ConfigBase::get_item: unknown key algo'
 >>> config.options_set({})
 >>> config.options_get()
 {}
->>> 
+>>>
 
 """
 
-import platform
 import os
+import platform
 from copy import copy
-from .configobj.configobj import ConfigObj, flatten_errors
-from .configobj.validate import Validator
-from .borg import Borg
-from .util import dbg, err, DEBUG, get_config_dir, dict_diff
 
 from gi.repository import Gio
+
+from .borg import Borg
+from .configobj.configobj import ConfigObj, flatten_errors
+from .configobj.validate import Validator
+from .util import dbg, err, DEBUG, get_config_dir, dict_diff
+from . import optionparse
 
 DEFAULTS = {
         'global_config':   {
@@ -194,7 +196,7 @@ DEFAULTS = {
             'edit_terminal_title': '<Control><Alt>x',
             'layout_launcher'  : '<Alt>l',
             'next_profile'     : '',
-            'previous_profile' : '', 
+            'previous_profile' : '',
             'help'             : 'F1'
         },
         'profiles': {
@@ -267,17 +269,14 @@ DEFAULTS = {
 
 class Config(object):
     """Class to provide a slightly richer config API above ConfigBase"""
-    base = None
-    profile = None
-    system_mono_font = None
-    system_prop_font = None
-    system_focus = None
-    inhibited = None
-    
+
     def __init__(self, profile='default'):
         self.base = ConfigBase()
         self.set_profile(profile)
         self.inhibited = False
+        self.system_mono_font = None
+        self.system_prop_font = None
+        self.system_focus = None
         self.connect_gsetting_callbacks()
 
     def __getitem__(self, key, default=None):
@@ -290,7 +289,7 @@ class Config(object):
 
     def get_profile(self):
         """Get our profile"""
-        return(self.profile)
+        return self.profile
 
     def set_profile(self, profile, force=False):
         """Set our profile (which usually means change it)"""
@@ -340,7 +339,7 @@ class Config(object):
 
     def replace_layout(self, name, layout):
         """Replace an existing layout"""
-        return(self.base.replace_layout(name, layout)) 
+        return(self.base.replace_layout(name, layout))
 
     def del_layout(self, layout):
         """Delete a layout"""
@@ -525,10 +524,10 @@ class ConfigBase(Borg):
         configspecdata = {}
 
         keymap = {
-                'int': 'integer',
-                'str': 'string',
-                'bool': 'boolean',
-                }
+            'int': 'integer',
+            'str': 'string',
+            'bool': 'boolean',
+        }
 
         section = {}
         for key in DEFAULTS['global_config']:
@@ -590,9 +589,10 @@ class ConfigBase(Borg):
             configspec.write(open('/tmp/terminator_configspec_debug.txt', 'w'))
         return(configspec)
 
+
     def load(self):
         """Load configuration data from our various sources"""
-        if self.loaded is True:
+        if self.loaded:
             dbg('ConfigBase::load: config already loaded')
             return
 
@@ -623,7 +623,7 @@ class ConfigBase(Borg):
             err('Unable to load configuration: %s' % ex)
             return
 
-        if result != True:
+        if not result:
             err('ConfigBase::load: config format is not valid')
             for (section_list, key, _other) in flatten_errors(parser, result):
                 if key is not None:
@@ -647,23 +647,19 @@ class ConfigBase(Borg):
                 if section_name not in parser:
                     continue
                 for part in parser[section_name]:
-                    dbg('ConfigBase::load: Processing %s: %s' % (section_name,
-                                                                 part))
+                    dbg('ConfigBase::load: Processing %s: %s' % (section_name, part))
                     section[part] = parser[section_name][part]
             elif section_name == 'layouts':
                 for layout in parser[section_name]:
-                    dbg('ConfigBase::load: Processing %s: %s' % (section_name,
-                                                                 layout))
-                    if layout == 'default' and \
-                       parser[section_name][layout] == {}:
-                           continue
+                    dbg('ConfigBase::load: Processing %s: %s' % (section_name, layout))
+                    if layout == 'default' and parser[section_name][layout] == {}:
+                        continue
                     section[layout] = parser[section_name][layout]
             elif section_name == 'keybindings':
                 if section_name not in parser:
                     continue
                 for part in parser[section_name]:
-                    dbg('ConfigBase::load: Processing %s: %s' % (section_name,
-                                                                 part))
+                    dbg('ConfigBase::load: Processing %s: %s' % (section_name, part))
                     if parser[section_name][part] == 'None':
                         section[part] = None
                     else:
@@ -672,8 +668,7 @@ class ConfigBase(Borg):
                 try:
                     section.update(parser[section_name])
                 except KeyError as ex:
-                    dbg('ConfigBase::load: skipping missing section %s' %
-                            section_name)
+                    dbg('ConfigBase::load: skipping missing section %s' % section_name)
 
         self.loaded = True
 
@@ -681,7 +676,8 @@ class ConfigBase(Borg):
         """Force a reload of the base config"""
         self.loaded = False
         self.load()
-        
+
+
     def save(self):
         """Save the config to a file"""
         dbg('ConfigBase::save: saving config')
@@ -696,8 +692,7 @@ class ConfigBase(Borg):
         parser['profiles'] = {}
         for profile in self.profiles:
             dbg('ConfigBase::save: Processing profile: %s' % profile)
-            parser['profiles'][profile] = dict_diff(
-                    DEFAULTS['profiles']['default'], self.profiles[profile])
+            parser['profiles'][profile] = dict_diff(DEFAULTS['profiles']['default'], self.profiles[profile])
 
         parser['layouts'] = {}
         for layout in self.layouts:
@@ -724,18 +719,15 @@ class ConfigBase(Borg):
             profile = 'default'
 
         if key in self.global_config:
-            dbg('ConfigBase::get_item: %s found in globals: %s' %
-                    (key, self.global_config[key]))
+            dbg('ConfigBase::get_item: %s found in globals: %s' % (key, self.global_config[key]))
             return(self.global_config[key])
         elif key in self.profiles[profile]:
-            dbg('ConfigBase::get_item: %s found in profile %s: %s' % (
-                    key, profile, self.profiles[profile][key]))
+            dbg('ConfigBase::get_item: %s found in profile %s: %s' % ( key, profile, self.profiles[profile][key]))
             return(self.profiles[profile][key])
         elif key == 'keybindings':
             return(self.keybindings)
         elif plugin and plugin in self.plugins and key in self.plugins[plugin]:
-            dbg('ConfigBase::get_item: %s found in plugin %s: %s' % (
-                    key, plugin, self.plugins[plugin][key]))
+            dbg('ConfigBase::get_item: %s found in plugin %s: %s' % (key, plugin, self.plugins[plugin][key]))
             return(self.plugins[plugin][key])
         elif default:
             return default
@@ -744,8 +736,7 @@ class ConfigBase(Borg):
 
     def set_item(self, key, value, profile='default', plugin=None):
         """Set a configuration item"""
-        dbg('ConfigBase::set_item: Setting %s=%s (profile=%s, plugin=%s)' %
-                (key, value, profile, plugin))
+        dbg('ConfigBase::set_item: Setting %s=%s (profile=%s, plugin=%s)' % (key, value, profile, plugin))
 
         if key in self.global_config:
             self.global_config[key] = value
@@ -753,7 +744,7 @@ class ConfigBase(Borg):
             self.profiles[profile][key] = value
         elif key == 'keybindings':
             self.keybindings = value
-        elif plugin is not None:
+        elif plugin:
             if plugin not in self.plugins:
                 self.plugins[plugin] = {}
             self.plugins[plugin][key] = value
@@ -764,8 +755,7 @@ class ConfigBase(Borg):
 
     def get_plugin(self, plugin):
         """Return a whole tree for a plugin"""
-        if plugin in self.plugins:
-            return(self.plugins[plugin])
+        return self.plugins.get(plugin)
 
     def set_plugin(self, plugin, tree):
         """Set a whole tree for a plugin"""
@@ -773,36 +763,36 @@ class ConfigBase(Borg):
 
     def del_plugin(self, plugin):
         """Delete a whole tree for a plugin"""
-        if plugin in self.plugins:
+        try:
             del self.plugins[plugin]
+        except KeyError:
+            err('invalid plugin %s' % plugin)
 
     def add_profile(self, profile):
         """Add a new profile"""
-        if profile in self.profiles:
-            return(False)
-        self.profiles[profile] = copy(DEFAULTS['profiles']['default'])
-        return(True)
+        if profile not in self.profiles:
+            self.profiles[profile] = copy(DEFAULTS['profiles']['default'])
+            return True
+        return False
 
     def add_layout(self, name, layout):
         """Add a new layout"""
-        if name in self.layouts:
-            return(False)
-        self.layouts[name] = layout
-        return(True)
+        if name not in self.layouts:
+            self.layouts[name] = layout
+            return True
+        return False
 
     def replace_layout(self, name, layout):
         """Replaces a layout with the given name"""
-        if not name in self.layouts:
-            return(False)
-        self.layouts[name] = layout
-        return(True)
+        try:
+            self.layouts[name] = layout
+            return True
+        except KeyError:
+            return False
 
     def get_layout(self, layout):
         """Return a layout"""
-        if layout in self.layouts:
-            return(self.layouts[layout])
-        else:
-            err('layout does not exist: %s' % layout)
+        return self.layouts[layout]
 
     def set_layout(self, layout, tree):
         """Set a layout"""

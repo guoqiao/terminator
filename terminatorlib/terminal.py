@@ -3,7 +3,6 @@
 # GPL v2 only
 """terminal.py - classes necessary to provide Terminal widgets"""
 
-from __future__ import division
 import os
 import signal
 import urllib
@@ -34,38 +33,29 @@ class Terminal(Gtk.VBox):
 
     __gsignals__ = {
         'close-term': (GObject.SignalFlags.RUN_LAST, None, ()),
-        'title-change': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_STRING,)),
-        'enumerate': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_INT,)),
+        'title-change': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_STRING,)),
+        'enumerate': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_INT,)),
         'group-tab': (GObject.SignalFlags.RUN_LAST, None, ()),
         'group-tab-toggle': (GObject.SignalFlags.RUN_LAST, None, ()),
         'ungroup-tab': (GObject.SignalFlags.RUN_LAST, None, ()),
         'ungroup-all': (GObject.SignalFlags.RUN_LAST, None, ()),
-        'split-horiz': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_STRING,)),
-        'split-vert': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_STRING,)),
+        'split-horiz': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_STRING,)),
+        'split-vert': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_STRING,)),
         'rotate-cw': (GObject.SignalFlags.RUN_LAST, None, ()),
         'rotate-ccw': (GObject.SignalFlags.RUN_LAST, None, ()),
-        'tab-new': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_BOOLEAN, GObject.TYPE_OBJECT)),
+        'tab-new': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_BOOLEAN, GObject.TYPE_OBJECT)),
         'tab-top-new': (GObject.SignalFlags.RUN_LAST, None, ()),
         'focus-in': (GObject.SignalFlags.RUN_LAST, None, ()),
         'focus-out': (GObject.SignalFlags.RUN_LAST, None, ()),
         'zoom': (GObject.SignalFlags.RUN_LAST, None, ()),
         'maximise': (GObject.SignalFlags.RUN_LAST, None, ()),
         'unzoom': (GObject.SignalFlags.RUN_LAST, None, ()),
-        'resize-term': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_STRING,)),
-        'navigate': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_STRING,)),
-        'tab-change': (GObject.SignalFlags.RUN_LAST, None,
-            (GObject.TYPE_INT,)),
+        'resize-term': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_STRING,)),
+        'navigate': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_STRING,)),
+        'tab-change': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_INT,)),
         'group-all': (GObject.SignalFlags.RUN_LAST, None, ()),
         'group-all-toggle': (GObject.SignalFlags.RUN_LAST, None, ()),
-        'move-tab': (GObject.SignalFlags.RUN_LAST, None, 
-            (GObject.TYPE_STRING,)),
+        'move-tab': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_STRING,)),
     }
 
     TARGET_TYPE_VTE = 8
@@ -73,7 +63,7 @@ class Terminal(Gtk.VBox):
 
     MOUSEBUTTON_LEFT = 1
     MOUSEBUTTON_MIDDLE = 2
-    MOUSEBUTTON_RIGHT = 3    
+    MOUSEBUTTON_RIGHT = 3
 
     terminator = None
     vte = None
@@ -134,18 +124,16 @@ class Terminal(Gtk.VBox):
 
         self.vte = Vte.Terminal()
         self.vte._draw_data = None
-        if not hasattr(self.vte, "set_opacity") or \
-           not hasattr(self.vte, "is_composited"):
-            self.composite_support = False
-        else:
+        if hasattr(self.vte, "set_opacity") and hasattr(self.vte, "is_composited"):
             self.composite_support = True
+        else:
+            self.composite_support = False
         dbg('composite_support: %s' % self.composite_support)
 
         self.vte.show()
 
         self.default_encoding = self.vte.get_encoding()
-        self.regex_flags = (GLib.RegexCompileFlags.OPTIMIZE | \
-                            GLib.RegexCompileFlags.MULTILINE)
+        self.regex_flags = (GLib.RegexCompileFlags.OPTIMIZE | GLib.RegexCompileFlags.MULTILINE)
         self.update_url_matches()
 
         self.terminalbox = self.create_terminalbox()
@@ -172,14 +160,14 @@ class Terminal(Gtk.VBox):
 
         env_proxy = os.getenv('http_proxy')
         if not env_proxy:
-            if self.config['http_proxy'] and self.config['http_proxy'] != '':
+            if self.config.get('http_proxy'):
                 os.putenv('http_proxy', self.config['http_proxy'])
         self.reconfigure()
         self.vte.set_size(80, 24)
 
     def get_vte(self):
         """This simply returns the vte widget we are using"""
-        return(self.vte)
+        return self.vte
 
     def force_set_profile(self, widget, profile):
         """Forcibly set our profile"""
@@ -193,7 +181,7 @@ class Terminal(Gtk.VBox):
 
     def get_profile(self):
         """Return our profile name"""
-        return(self.config.profile)
+        return self.config.profile
 
     def switch_to_next_profile(self):
         profilelist = self.config.list_profiles()

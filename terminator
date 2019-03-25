@@ -33,15 +33,14 @@ try:
     gi.require_version('Gtk','3.0')
     # pylint: disable-msg=W0611
     from gi.repository import Gtk, Gdk
-
-    if Gdk.Display.get_default() == None:
-        print('You need to run terminator in an X environment. ' \
+    if not Gdk.Display.get_default():
+        print('You need to run terminator in an X environment. '
               'Make sure $DISPLAY is properly set')
         sys.exit(1)
 
 except ImportError:
-    print('You need to install the python bindings for ' \
-           'gobject, gtk and pango to run Terminator.')
+    print('You need to install the python bindings for gobject, '
+          'gtk and pango to run Terminator.')
     sys.exit(1)
 
 import terminatorlib.optionparse
@@ -59,17 +58,17 @@ if __name__ == '__main__':
     ibus_running = [p for p in psutil.process_iter() if p.name == 'ibus-daemon' and p.username == username]
     ibus_running = len(ibus_running) > 0
     if ibus_running:
-        os.environ['IBUS_DISABLE_SNOOPER']='1'
+        os.environ['IBUS_DISABLE_SNOOPER'] = '1'
 
     dbus_service = None
 
-    dbg ("%s starting up, version %s" % (APP_NAME, APP_VERSION))
-  
+    dbg("%s starting up, version %s" % (APP_NAME, APP_VERSION))
+
     OPTIONS = terminatorlib.optionparse.parse_options()
 
     if OPTIONS.select:
         # launch gui, return selection
-        LAYOUTLAUNCHER=LayoutLauncher()
+        LAYOUTLAUNCHER = LayoutLauncher()
     else:
         # Attempt to import our dbus server. If one exists already we will just
         # connect to that and ask for a new window. If not, we will create one and
@@ -97,7 +96,7 @@ if __name__ == '__main__':
                         val = ' '.join(val)
                     if val == True:
                         val = 'True'
-                    optionslist[opt] = val and '%s'%val or ''
+                    optionslist[opt] = val and str(val) or ''
                 optionslist = dbus.Dictionary(optionslist, signature='ss')
                 if OPTIONS.new_tab:
                     dbg('Requesting a new tab')

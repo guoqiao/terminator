@@ -16,17 +16,18 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 """Terminator.util - misc utility functions"""
 
-import sys
-import cairo
 import os
+import sys
 import pwd
-import inspect
 import uuid
+import inspect
 import subprocess
-import gi
+
+import cairo
 
 try:
-    gi.require_version('Gtk','3.0')
+    import gi
+    gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk, Gdk
 except ImportError:
     print('You need Gtk 3.0+ to run Remotinator.')
@@ -41,7 +42,7 @@ DEBUGCLASSES = []
 # list of methods to show debugging for. empty list means show all methods
 DEBUGMETHODS = []
 
-def dbg(log = ""):
+def dbg(log=""):
     """Print a message if debugging is enabled"""
     if DEBUG:
         stackitem = inspect.stack()[1]
@@ -84,76 +85,61 @@ def gerr(message = None):
     dialog.run()
     dialog.destroy()
 
+
 def has_ancestor(widget, wtype):
     """Walk up the family tree of widget to see if any ancestors are of type"""
     while widget:
         widget = widget.get_parent()
         if isinstance(widget, wtype):
-            return(True)
-    return(False)
+            return True
+    return False
+
 
 def manual_lookup():
     '''Choose the manual to open based on LANGUAGE'''
-    available_languages = ['en']
-    base_url = 'http://terminator-gtk3.readthedocs.io/%s/latest/'
-    target = 'en'   # default to English
-    if 'LANGUAGE' in os.environ:
-        languages = os.environ['LANGUAGE'].split(':')
-        for language in languages:
-            if language in available_languages:
-                target = language
-                break
+    return 'http://terminator-gtk3.readthedocs.io/en/latest/'
 
-    return base_url % target
 
 def path_lookup(command):
     '''Find a command in our path'''
     if os.path.isabs(command):
-        if os.path.isfile(command):
-            return(command)
-        else:
-            return(None)
-    elif command[:2] == './' and os.path.isfile(command):
+        return command if os.path.isfile(command) else None
+
+    if command.startswith('./') and os.path.isfile(command):
         dbg('path_lookup: Relative filename %s found in cwd' % command)
-        return(command)
+        return command
 
-    try:
-        paths = os.environ['PATH'].split(':')
-        if len(paths[0]) == 0: 
-            raise(ValueError)
-    except (ValueError, NameError):
-        dbg('path_lookup: PATH not set in environment, using fallbacks')
-        paths = ['/usr/local/bin', '/usr/bin', '/bin']
-
+    paths = os.environ.get('PATH', '/usr/local/bin:/usr/bin:/bin').split(':')
     dbg('path_lookup: Using %d paths: %s' % (len(paths), paths))
 
     for path in paths:
         target = os.path.join(path, command)
         if os.path.isfile(target):
             dbg('path_lookup: found %s' % target)
-            return(target)
+            return target
 
     dbg('path_lookup: Unable to locate %s' % command)
 
+
 def shell_lookup():
     """Find an appropriate shell for the user"""
+    shells = ['bash', 'zsh', 'tcsh', 'ksh', 'csh', 'sh']
     try:
         usershell = pwd.getpwuid(os.getuid())[6]
+        shells = [usershell] + shells
     except KeyError:
-        usershell = None
-    shells = [usershell, 'bash', 'zsh', 'tcsh', 'ksh', 'csh', 'sh']
+        err('unable to find user shell %s' % usershell)
+        pass
 
     for shell in shells:
-        if shell is None:
-            continue
-        elif os.path.isfile(shell):
-            return(shell)
-        else:
-            rshell = path_lookup(shell)
-            if rshell is not None:
-                dbg('shell_lookup: Found %s at %s' % (shell, rshell))
-                return(rshell)
+        if os.path.isfile(shell):
+            return shell
+        rshell = path_lookup(shell)
+        if rshell:
+            dbg('shell_lookup: Found %s at %s' % (shell, rshell))
+            return rshell
     dbg('shell_lookup: Unable to locate a shell')
+
 
 def widget_pixbuf(widget, maxsize=None):
     """Generate a pixbuf of a widget"""
@@ -180,25 +166,20 @@ def widget_pixbuf(widget, maxsize=None):
     cairo_context.paint()
 
     scaledpixbuf = Gdk.pixbuf_get_from_surface(preview_surface, 0, 0, preview_width, preview_height);
-    
     return(scaledpixbuf)
 
-def get_config_dir():
-    """Expand all the messy nonsense for finding where ~/.config/terminator
-    really is"""
-    try:
-        configdir = os.environ['XDG_CONFIG_HOME']
-    except KeyError:
-        configdir = os.path.join(os.path.expanduser('~'), '.config')
 
+def get_config_dir():
+    """Expand all the messy nonsense for finding where ~/.config/terminator really is"""
+    configdir = os.environ.get('XDG_CONFIG_HOME') or os.path.join(os.path.expanduser('~'), '.config')
     dbg('Found config dir: %s' % configdir)
-    return(os.path.join(configdir, 'terminator'))
+    return os.path.join(configdir, 'terminator')
+
 
 def dict_diff(reference, working):
     """Examine the values in the supplied working set and return a new dict
     that only contains those values which are different from those in the
     reference dictionary
-    
     >>> a = {'foo': 'bar', 'baz': 'bjonk'}
     >>> b = {'foo': 'far', 'baz': 'bjonk'}
     >>> dict_diff(a, b)
@@ -211,12 +192,11 @@ def dict_diff(reference, working):
         if reference[key] != working[key]:
             result[key] = working[key]
 
-    return(result)
+    return result
 
 # Helper functions for directional navigation
 def get_edge(allocation, direction):
-    """Return the edge of the supplied allocation that we will care about for
-    directional navigation"""
+    """Return the edge of the supplied allocation that we will care about for directional navigation"""
     if direction == 'left':
         edge = allocation.x
         p1, p2 = allocation.y, allocation.y + allocation.height
@@ -231,8 +211,8 @@ def get_edge(allocation, direction):
         p1, p2 = allocation.x, allocation.x + allocation.width
     else:
         raise ValueError('unknown direction %s' % direction)
-    
-    return(edge, p1, p2)
+    return (edge, p1, p2)
+
 
 def get_nav_possible(edge, allocation, direction, p1, p2):
     """Check if the supplied allocation is in the right direction of the
@@ -249,6 +229,7 @@ def get_nav_possible(edge, allocation, direction, p1, p2):
         return(y1 >= edge and x1 <= p2 and x2 >= p1)
     else:
         raise ValueError('Unknown direction: %s' % direction)
+
 
 def get_nav_offset(edge, allocation, direction):
     """Work out how far edge is from a particular point on the allocation
@@ -296,7 +277,7 @@ def enumerate_descendants(parent):
         elif maker.isinstance(descendant, 'Terminal'):
             terminals.append(descendant)
 
-        while len(containerstmp) > 0:
+        while containerstmp > 0:
             child = containerstmp.pop(0)
             for descendant in child.get_children():
                 if maker.isinstance(descendant, 'Container'):
@@ -305,24 +286,23 @@ def enumerate_descendants(parent):
                     terminals.append(descendant)
             containers.append(child)
 
-    dbg('%d containers and %d terminals fall beneath %s' % (len(containers), 
-        len(terminals), parent))
+    dbg('%d containers and %d terminals fall beneath %s' % (len(containers), len(terminals), parent))
     return(containers, terminals)
+
 
 def make_uuid(str_uuid=None):
     """Generate a UUID for an object"""
-    if str_uuid:
-        return uuid.UUID(str_uuid)
-    return uuid.uuid4()
+    return uuid.UUID(str_uuid) if str_uuid else uuid.uuid4()
+
 
 def inject_uuid(target):
     """Inject a UUID into an existing object"""
-    uuid = make_uuid()
-    if not hasattr(target, "uuid") or target.uuid == None:
-        dbg("Injecting UUID %s into: %s" % (uuid, target))
-        target.uuid = uuid
-    else:
+    if getattr(target, "uuid"):
         dbg("Object already has a UUID: %s" % target)
+    else:
+        target.uuid = make_uuid()
+        dbg("Injecting UUID %s into: %s" % (target.uuid, target))
+
 
 def spawn_new_terminator(cwd, args):
     """Start a new terminator instance with the given arguments"""
@@ -330,18 +310,15 @@ def spawn_new_terminator(cwd, args):
 
     if not os.path.isabs(cmd):
         # Command is not an absolute path. Figure out where we are
-        cmd = os.path.join (cwd, sys.argv[0])
+        cmd = os.path.join(cwd, sys.argv[0])
         if not os.path.isfile(cmd):
             # we weren't started as ./terminator in a path. Give up
             err('Unable to locate Terminator')
             return False
-      
     dbg("Spawning: %s" % cmd)
     subprocess.Popen([cmd]+args)
 
+
 def display_manager():
     """Try to detect which display manager we run under"""
-    if os.environ.get('WAYLAND_DISPLAY'):
-        return 'WAYLAND'
-    # Fallback assumption of X11
-    return 'X11'
+    return 'WAYLAND' if os.environ.get('WAYLAND_DISPLAY') else 'X11'
