@@ -160,7 +160,7 @@ class Terminal(Gtk.VBox):
 
         env_proxy = os.getenv('http_proxy')
         if not env_proxy:
-            if self.config.get('http_proxy'):
+            if self.config['http_proxy']:
                 os.putenv('http_proxy', self.config['http_proxy'])
         self.reconfigure()
         self.vte.set_size(80, 24)
