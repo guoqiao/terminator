@@ -260,7 +260,7 @@ def enumerate_descendants(parent):
     terminals"""
     # FIXME: Does having to import this here mean we should move this function
     # back to Container?
-    from factory import Factory
+    from .factory import Factory
 
     containerstmp = []
     containers = []
