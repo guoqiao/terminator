@@ -44,10 +44,10 @@ class Plugin(object):
 
 class PluginRegistry(borg.Borg):
     """Definition of a class to store plugin instances"""
-    available_plugins = None
-    instances = None
-    path = None
-    done = None
+    available_plugins = {}
+    instances = {}
+    path = []
+    done = False
 
     def __init__(self):
         """Class initialiser"""
@@ -56,19 +56,11 @@ class PluginRegistry(borg.Borg):
 
     def prepare_attributes(self):
         """Prepare our attributes"""
-        if not self.instances:
-            self.instances = {}
         if not self.path:
-            self.path = []
             (head, _tail) = os.path.split(borg.__file__)
             self.path.append(os.path.join(head, 'plugins'))
             self.path.append(os.path.join(get_config_dir(), 'plugins'))
-            dbg('PluginRegistry::prepare_attributes: Plugin path: %s' % 
-                self.path)
-        if not self.done:
-            self.done = False
-        if not self.available_plugins:
-            self.available_plugins = {}
+            dbg('PluginRegistry::prepare_attributes: Plugin path: %s' % self.path)
 
     def load_plugins(self, testing=False):
         """Load all plugins present in the plugins/ directory in our module"""
