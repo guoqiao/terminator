@@ -9,7 +9,7 @@ import uuid
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import GObject, Gtk, Gdk, GdkX11
+from gi.repository import GObject, Gtk, Gdk
 
 from .util import dbg, err, make_uuid, display_manager
 from . import util
@@ -314,11 +314,7 @@ class Window(Container, Gtk.Window):
                 self.move(self.position[0], self.position[1])
             self.show()
             self.grab_focus()
-            try:
-                t = GdkX11.x11_get_server_time(self.get_window())
-            except (TypeError, AttributeError):
-                t = 0
-            self.get_window().focus(t)
+            self.get_window().focus(0)
         else:
             self.position = self.get_position()
             self.hidefunc()

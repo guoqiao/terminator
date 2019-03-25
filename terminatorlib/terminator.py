@@ -9,7 +9,7 @@ import copy
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Vte', '2.91')
-from gi.repository import Gtk, Gdk, Vte, GdkX11
+from gi.repository import Gtk, Gdk, Vte
 from gi.repository.GLib import GError
 
 from . import borg
@@ -393,11 +393,7 @@ class Terminator(Borg):
         for window in new_win_list:
             window.show()
             window.grab_focus()
-            try:
-                t = GdkX11.x11_get_server_time(window.get_window())
-            except (TypeError, AttributeError):
-                t = 0
-            window.get_window().focus(t)
+            window.get_window().focus(0)
 
         # Awful workaround to be sure that the last focused window is actually the one focused.
         # Don't ask, don't tell policy on this. Even this is not 100%
@@ -409,11 +405,7 @@ class Terminator(Borg):
                 Gtk.main_iteration_do(False)
                 window.show()
                 window.grab_focus()
-                try:
-                    t = GdkX11.x11_get_server_time(window.get_window())
-                except (TypeError, AttributeError):
-                    t = 0
-                window.get_window().focus(t)
+                window.get_window().focus(0)
 
         self.prelayout_windows = None
 
