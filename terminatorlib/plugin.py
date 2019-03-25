@@ -80,8 +80,7 @@ class PluginRegistry(borg.Borg):
                     continue
                 pluginpath = os.path.join(plugindir, plugin)
                 if os.path.isfile(pluginpath) and plugin[-3:] == '.py':
-                    dbg('PluginRegistry::load_plugins: Importing plugin %s' % 
-                        plugin)
+                    dbg('PluginRegistry::load_plugins: Importing plugin %s' % plugin)
                     try:
                         module = __import__(plugin[:-3], None, None, [''])
                         for item in getattr(module, 'AVAILABLE'):
@@ -95,8 +94,7 @@ class PluginRegistry(borg.Borg):
                             if item not in self.instances:
                                 self.instances[item] = func()
                     except Exception as ex:
-                        err('PluginRegistry::load_plugins: Importing plugin %s \
-failed: %s' % (plugin, ex))
+                        err('PluginRegistry::load_plugins: Importing plugin %s failed: %s' % (plugin, ex))
 
         self.done = True
 
