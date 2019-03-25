@@ -38,8 +38,7 @@ class Paned(Container):
 
 
     # pylint: disable-msg=W0613
-    def split_axis(self, widget, vertical=True, cwd=None, sibling=None,
-            widgetfirst=True):
+    def split_axis(self, widget, vertical=True, cwd=None, sibling=None, widgetfirst=True):
         """Default axis splitter. This should be implemented by subclasses"""
         order = None
 
@@ -48,7 +47,6 @@ class Paned(Container):
             container = VPaned()
         else:
             container = HPaned()
-        
         self.get_toplevel().set_pos_by_ratio = True
 
         if not sibling:
@@ -65,16 +63,13 @@ class Paned(Container):
         self.add(container)
         self.show_all()
 
-        order = [widget, sibling]
-        if widgetfirst is False:
-            order.reverse()
-
+        order = [widget, sibling] if widgetfirst else [sibling, widget]
         for terminal in order:
             container.add(terminal)
 
         self.show_all()
         sibling.grab_focus()
-        
+
         while Gtk.events_pending():
             Gtk.main_iteration_do(False)
         self.get_toplevel().set_pos_by_ratio = False
@@ -142,7 +137,6 @@ class Paned(Container):
                 recurse_up=True
             else:
                 recurse_up=False
-            
             if event.get_state() & Gdk.ModifierType.SHIFT_MASK == Gdk.ModifierType.SHIFT_MASK:
                 recurse_down=True
             else:
@@ -185,7 +179,6 @@ class Paned(Container):
             highest_ancestor = highest_ancestor.get_parent()
 
         highest_ancestor.set_autoresize(False)
-        
         # (1b) If Super modifier, redistribute higher sections too
         if recurse_up:
             grandfather=highest_ancestor.get_parent()
@@ -196,7 +189,7 @@ class Paned(Container):
         highest_ancestor._do_redistribute(recurse_up, recurse_down)
 
         GObject.idle_add(highest_ancestor.set_autoresize, True)
-    
+
     def _do_redistribute(self, recurse_up=False, recurse_down=False):
         maker = Factory()
         #2 Make a list of self + all children of same type
@@ -222,7 +215,7 @@ class Paned(Container):
                       (maker.isinstance(child, 'VPaned') or \
                        maker.isinstance(child, 'HPaned')):
                         child.do_redistribute(False, True)
-                    
+
         #3 Get ancestor x/y => a, and handle size => hs
         avail_pixels=self.get_length()
         handle_size = self.get_handlesize()
@@ -358,58 +351,30 @@ class Paned(Container):
 
     def create_layout(self, layout):
         """Apply layout configuration"""
-        if 'children' not in layout:
+        children = layout.get('children', {})
+        if not children:
             err('layout specifies no children: %s' % layout)
             return
 
-        children = layout['children']
         if len(children) != 2:
             # Paned widgets can only have two children
             err('incorrect number of children for Paned: %s' % layout)
             return
 
-        keys = []
-
-        # FIXME: This seems kinda ugly. All we want here is to know the order
-        # of children based on child['order']
-        try:
-            child_order_map = {}
-            for child in children:
-                key = children[child]['order']
-                child_order_map[key] = child
-            map_keys = child_order_map.keys()
-            map_keys.sort()
-            for map_key in map_keys:
-                keys.append(child_order_map[map_key])
-        except KeyError:
-            # We've failed to figure out the order. At least give the terminals
-            # in the wrong order
-            keys = children.keys()
+        children_list = sorted(children.values(), key=lambda child: child['order'])
 
         num = 0
-        for child_key in keys:
-            child = children[child_key]
+        for child in children_list:
             dbg('Making a child of type: %s' % child['type'])
-            if child['type'] == 'Terminal':
-                pass
-            elif child['type'] == 'VPaned':
-                if num == 0:
-                    terminal = self.get_child1()
-                else:
-                    terminal = self.get_child2()
-                self.split_axis(terminal, True)
-            elif child['type'] == 'HPaned':
-                if num == 0:
-                    terminal = self.get_child1()
-                else:
-                    terminal = self.get_child2()
-                self.split_axis(terminal, False)
-            else:
+            if child['type'] in ['VPaned', 'HPaned']:
+                terminal = self.get_child1() if num == 0 else  self.get_child2()
+                self.split_axis(terminal, vertical=(child['type'] == 'VPaned'))
+            elif child['type'] != 'Terminal':
                 err('unknown child type: %s' % child['type'])
             num = num + 1
 
-        self.get_child1().create_layout(children[keys[0]])
-        self.get_child2().create_layout(children[keys[1]])
+        self.get_child1().create_layout(children_list[0])
+        self.get_child2().create_layout(children_list[1])
 
         # Set the position with ratio. For some reason more reliable than by pos.
         if 'ratio' in layout:
