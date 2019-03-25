@@ -200,11 +200,8 @@ class PrefsEditor:
         self.builder.connect_signals(self)
         self.layouteditor.prepare()
         self.window.show_all()
-        try:
-            self.config.inhibit_save()
-            self.set_values()
-        except Exception as e:
-            err('Unable to set values: %s' % e)
+        self.config.inhibit_save()
+        self.set_values()
         self.config.uninhibit_save()
 
     def on_closebutton_clicked(self, _button):
