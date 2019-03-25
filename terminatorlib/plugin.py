@@ -71,12 +71,10 @@ class PluginRegistry(borg.Borg):
         config = Config()
 
         for plugindir in self.path:
-            sys.path.insert(0, plugindir)
-            try:
-                files = os.listdir(plugindir)
-            except OSError:
-                sys.path.remove(plugindir)
+            if not os.path.isdir(plugindir):
                 continue
+            sys.path.insert(0, plugindir)
+            files = os.listdir(plugindir)
             for plugin in files:
                 if plugin == '__init__.py':
                     continue
