@@ -6,10 +6,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 
-from gi.repository import GObject
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Gio
+from gi.repository import GObject, Gtk, Gdk, Gio
 
 from .terminator import Terminator
 from .config import Config
@@ -18,6 +15,7 @@ from .container import Container
 from .editablelabel import EditableLabel
 from .translation import _
 from .util import err, dbg, enumerate_descendants, make_uuid
+
 
 class Notebook(Container, Gtk.Notebook):
     """Class implementing a Gtk.Notebook container"""
@@ -168,10 +166,7 @@ class Notebook(Container, Gtk.Notebook):
         self.set_tab_label(container, label)
         self.show_all()
 
-        order = [widget, sibling]
-        if widgetfirst is False:
-            order.reverse()
-
+        order = [widget, sibling] if widgetfirst else [sibling, widget]
         for terminal in order:
             container.add(terminal)
         self.set_current_page(page_num)
@@ -193,8 +188,7 @@ class Notebook(Container, Gtk.Notebook):
         """Remove a widget from the container"""
         page_num = self.page_num(widget)
         if page_num == -1:
-            err('%s not found in Notebook. Actual parent is: %s' % 
-                    (widget, widget.get_parent()))
+            err('%s not found in Notebook. Actual parent is: %s' % (widget, widget.get_parent()))
             return(False)
         self.remove_page(page_num)
         self.disconnect_child(widget)
@@ -218,13 +212,13 @@ class Notebook(Container, Gtk.Notebook):
         elif label.get_custom_label():
             metadata['label'] = label.get_custom_label()
         else:
-            dbg('don\'t grab the label as it was not customised')
+            dbg("don't grab the label as it was not customised")
         return metadata
 
     def get_children(self):
         """Return an ordered list of our children"""
         children = []
-        for page in range(0,self.get_n_pages()):
+        for page in range(0, self.get_n_pages()):
             children.append(self.get_nth_page(page))
         return(children)
 
@@ -401,7 +395,6 @@ class Notebook(Container, Gtk.Notebook):
         if not label:
             err('Notebook::update_tab_label_text: %s not found' % widget)
             return
-        
         label.set_label(text)
 
     def hoover(self):
@@ -466,7 +459,6 @@ class Notebook(Container, Gtk.Notebook):
         """Prime a single idle tab switch signal, using the most recent set of params"""
         tabs_last_active_term = self.last_active_term.get(self.get_nth_page(page_num),  None)
         data = {'tabs_last_active_term':tabs_last_active_term}
-        
         self.pending_on_tab_switch_args = (notebook, page,  page_num,  data)
         if self.pending_on_tab_switch == True:
             return
@@ -580,10 +572,7 @@ class TabLabel(Gtk.HBox):
 
     def get_custom_label(self):
         """Return a custom label if we have one, otherwise None"""
-        if self.label.is_custom():
-            return(self.label.get_text())
-        else:
-            return(None)
+        return self.label.get_text() if self.label.is_custom() else None
 
     def edit(self):
         self.label.edit()
@@ -605,7 +594,6 @@ class TabLabel(Gtk.HBox):
         if not self.icon:
             self.icon = Gio.ThemedIcon.new_with_default_fallbacks("window-close-symbolic")
             self.icon = Gtk.Image.new_from_gicon(self.icon, Gtk.IconSize.MENU)
-            
         self.button.set_focus_on_click(False)
         self.button.set_relief(Gtk.ReliefStyle.NONE)
 #        style = Gtk.RcStyle()  # FIXME FOR GTK3 how to do it there? actually do we really want to override the theme?
@@ -639,5 +627,3 @@ class TabLabel(Gtk.HBox):
     def on_close(self, _widget):
         """The close button has been clicked. Destroy the tab"""
         self.emit('close-clicked', self)
-
-# vim: set expandtab ts=4 sw=4:
