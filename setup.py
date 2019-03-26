@@ -16,8 +16,10 @@ import platform
 
 from terminatorlib.version import APP_NAME, APP_VERSION
 
+TOP_BUILDDIR = "/tmp/terminator-build"
+
 PO_DIR = 'po'
-MO_DIR = os.path.join('build', 'mo')
+MO_DIR = os.path.join(TOP_BUILDDIR, 'mo')
 CSS_DIR = os.path.join('terminatorlib', 'themes')
 
 class TerminatorDist(Distribution):
@@ -59,7 +61,6 @@ class BuildData(build):
             error("Error: %s" % str(e))
             sys.exit(1)
 
-      TOP_BUILDDIR='.'
       INTLTOOL_MERGE='intltool-merge'
       desktop_in='data/terminator.desktop.in'
       desktop_data='data/terminator.desktop'
