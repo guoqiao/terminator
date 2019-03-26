@@ -81,28 +81,26 @@ def parse_options():
             dest='working_directory', help=_('Set the working directory'))
     parser.add_option('-i', '--icon', dest='forcedicon', help=_('Set a custom \
 icon for the window (by file or name)'))
-    parser.add_option('-r', '--role', dest='role', 
+    parser.add_option('-r', '--role', dest='role',
             help=_('Set a custom WM_WINDOW_ROLE property on the window'))
-    parser.add_option('-l', '--layout', dest='layout', 
+    parser.add_option('-l', '--layout', dest='layout', default='default',
             help=_('Launch with the given layout'))
     parser.add_option('-s', '--select-layout', action='store_true',
             dest='select', help=_('Select a layout from a list'))
-    parser.add_option('-p', '--profile', dest='profile', 
+    parser.add_option('-p', '--profile', dest='profile', default='default',
             help=_('Use a different profile as the default'))
-    parser.add_option('-u', '--no-dbus', action='store_true', dest='nodbus', 
+    parser.add_option('-u', '--no-dbus', action='store_true', dest='nodbus',
             help=_('Disable DBus'))
     parser.add_option('-d', '--debug', action='count', dest='debug',
             help=_('Enable debugging information (twice for debug server)'))
-    parser.add_option('--debug-classes', action='store', dest='debug_classes', 
+    parser.add_option('--debug-classes', action='store', dest='debug_classes',
             help=_('Comma separated list of classes to limit debugging to'))
     parser.add_option('--debug-methods', action='store', dest='debug_methods',
             help=_('Comma separated list of methods to limit debugging to'))
     parser.add_option('--new-tab', action='store_true', dest='new_tab',
             help=_('If Terminator is already running, just open a new tab'))
-    for item in ['--sm-client-id', '--sm-config-prefix', '--screen', '-n',
-                 '--no-gconf' ]:
-        parser.add_option(item, dest='dummy', action='store',
-                help=SUPPRESS_HELP)
+    for item in ['--sm-client-id', '--sm-config-prefix', '--screen', '-n', '--no-gconf' ]:
+        parser.add_option(item, dest='dummy', action='store', help=SUPPRESS_HELP)
 
     global options
     (options, args) = parser.parse_args()
@@ -139,16 +137,12 @@ icon for the window (by file or name)'))
                     options.working_directory)
             options.working_directory = ''
 
-    if options.layout is None:
-        options.layout = 'default'
-
     configobj = config.Config()
     if options.profile and options.profile not in configobj.list_profiles():
         options.profile = None
 
     configobj.options_set(options)
 
-    if util.DEBUG == True:
-        dbg('OptionParse::parse_options: command line options: %s' % options)
+    dbg('OptionParse::parse_options: command line options: %s' % options)
 
     return(options)
