@@ -70,8 +70,7 @@ class Titlebar(Gtk.EventBox):
             icon_name = 'group'
         elif self.terminator.groupsend == groupsend_type['off']:
             icon_name = 'off'
-        self.set_from_icon_name('_active_broadcast_%s' % icon_name, 
-                Gtk.IconSize.MENU)
+        self.set_from_icon_name('_active_broadcast_%s' % icon_name, Gtk.IconSize.MENU)
 
         grouphbox.pack_start(self.groupicon, False, True, 2)
         grouphbox.pack_start(self.grouplabel, False, True, 2)
@@ -173,16 +172,14 @@ class Titlebar(Gtk.EventBox):
                     Gdk.color_parse(title_fg))
             self.grouplabel.modify_fg(Gtk.StateType.NORMAL,
                     Gdk.color_parse(group_fg))
-            self.modify_bg(Gtk.StateType.NORMAL, 
-                    Gdk.color_parse(title_bg))
+            self.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse(title_bg))
             if not self.get_desired_visibility():
-                if default_bg == True:
+                if default_bg:
                     color = term.get_style_context().get_background_color(Gtk.StateType.NORMAL)  # VERIFY FOR GTK3
                 else:
                     color = Gdk.color_parse(title_bg)
             self.update_visibility()
-            self.ebox.modify_bg(Gtk.StateType.NORMAL,
-                    Gdk.color_parse(group_bg))
+            self.ebox.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse(group_bg))
             self.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
     def update_visibility(self):
@@ -199,7 +196,7 @@ class Titlebar(Gtk.EventBox):
     def get_desired_visibility(self):
         """Returns True if the titlebar is supposed to be visible. False if
         not"""
-        if self.editing() == True or self.terminal.group:
+        if self.editing() or self.terminal.group:
             dbg('implicit desired visibility')
             return(True)
         else:
@@ -211,7 +208,6 @@ class Titlebar(Gtk.EventBox):
         if not name:
             self.groupicon.hide()
             return
-        
         self.groupicon.set_from_icon_name(APP_NAME + name, size)
         self.groupicon.show()
 
@@ -313,10 +309,7 @@ class Titlebar(Gtk.EventBox):
 
     def get_custom_string(self):
         """If we have a custom string set, return it, otherwise None"""
-        if self.label.is_custom():
-            return(self.label.get_text())
-        else:
-            return(None)
+        return self.label.get_text() if self.label.is_custom() else None
 
     def set_custom_string(self, string):
         """Set a custom string"""

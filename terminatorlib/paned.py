@@ -18,8 +18,6 @@ from .container import Container
 # pylint: disable-msg=R0921
 # pylint: disable-msg=E1101
 class Paned(Container):
-    """Base class for Paned Containers"""
-
     position = None
     maker = None
     ratio = 0.5
@@ -31,22 +29,17 @@ class Paned(Container):
         self.terminator = Terminator()
         self.maker = Factory()
         Container.__init__(self)
-        self.signals.append({'name': 'resize-term', 
+        self.signals.append({'name': 'resize-term',
                              'flags': GObject.SignalFlags.RUN_LAST,
-                             'return_type': None, 
+                             'return_type': None,
                              'param_types': (GObject.TYPE_STRING,)})
 
 
     # pylint: disable-msg=W0613
     def split_axis(self, widget, vertical=True, cwd=None, sibling=None, widgetfirst=True):
         """Default axis splitter. This should be implemented by subclasses"""
-        order = None
-
         self.remove(widget)
-        if vertical:
-            container = VPaned()
-        else:
-            container = HPaned()
+        container = VPaned() if vertical else HPaned()
         self.get_toplevel().set_pos_by_ratio = True
 
         if not sibling:

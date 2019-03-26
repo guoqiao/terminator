@@ -123,7 +123,7 @@ class Searchbar(Gtk.HBox):
     def do_search(self, widget):
         """Trap and re-emit the clicked signal"""
         searchtext = self.entry.get_text()
-        if searchtext == '':
+        if not searchtext:
             return
 
         if searchtext != self.searchstring:

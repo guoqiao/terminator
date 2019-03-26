@@ -101,8 +101,7 @@ class PluginRegistry(borg.Borg):
     def get_plugins_by_capability(self, capability):
         """Return a list of plugins with a particular capability"""
         result = []
-        dbg('PluginRegistry::get_plugins_by_capability: searching %d plugins \
-for %s' % (len(self.instances), capability))
+        dbg('PluginRegistry::get_plugins_by_capability: searching %d plugins for %s' % (len(self.instances), capability))
         for plugin in self.instances:
             if capability in self.instances[plugin].capabilities:
                 result.append(self.instances[plugin])
