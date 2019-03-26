@@ -100,7 +100,8 @@ class LayoutLauncher:
             (listmodel, rowiter) = selection.get_selected()
         layout = listmodel.get_value(rowiter, 0)
         dbg('Clicked for %s' % layout)
-        spawn_new_terminator(self.terminator.origcwd, ['-u', '-l', layout])
+        cwd = self.terminator.origcwd or os.getcwd()
+        spawn_new_terminator(cwd, ['-u', '-l', layout])
 
 if __name__ == '__main__':
     import util
