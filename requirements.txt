@@ -4,3 +4,4 @@ borgbackup
 condor
 configobj
 psutil
+loguru
