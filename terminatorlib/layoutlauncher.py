@@ -17,16 +17,6 @@ from .terminator import Terminator
 from .plugin import PluginRegistry
 
 class LayoutLauncher:
-    """Class implementing the various parts of the preferences editor"""
-    terminator = None
-    config = None
-    registry = None
-    plugins = None
-    keybindings = None
-    window = None
-    builder = None
-    layouttreeview = None
-    layouttreestore = None
 
     def __init__ (self):
         self.terminator = Terminator()
@@ -34,19 +24,12 @@ class LayoutLauncher:
 
         self.config = config.Config()
         self.config.base.reload()
-        self.builder = Gtk.Builder()
-        try:
-            # Figure out where our library is on-disk so we can open our UI
-            (head, _tail) = os.path.split(config.__file__)
-            librarypath = os.path.join(head, 'layoutlauncher.glade')
-            gladefile = open(librarypath, 'r')
-            gladedata = gladefile.read()
-        except Exception as ex:
-            print("Failed to find layoutlauncher.glade")
-            print(ex)
-            return
 
-        self.builder.add_from_string(gladedata)
+        root = os.path.dirname(config.__file__)
+        glade = os.path.join(root, 'layoutlauncher.glade')
+
+        self.builder = Gtk.Builder()
+        self.builder.add_from_file(glade)
         self.window = self.builder.get_object('layoutlauncherwin')
 
         icon_theme = Gtk.IconTheme.get_default()
@@ -75,11 +58,11 @@ class LayoutLauncher:
         """Update the contents of the layout"""
         self.layouttreestore.clear()
         layouts = self.config.list_layouts()
-        for layout in sorted(layouts, cmp=lambda x,y: cmp(x.lower(), y.lower())):
-            if layout != "default":
-                self.layouttreestore.append([layout])
-            else:
+        for layout in sorted(layouts, key=str.lower):
+            if layout == "default":
                 self.layouttreestore.prepend([layout])
+            else:
+                self.layouttreestore.append([layout])
 
     def on_launchbutton_clicked(self, widget):
         """Handle button click"""
@@ -92,7 +75,7 @@ class LayoutLauncher:
     def launch_layout(self):
         """Launch the selected layout as new instance"""
         dbg('We have takeoff!')
-        selection=self.layouttreeview.get_selection()
+        selection = self.layouttreeview.get_selection()
         (listmodel, rowiter) = selection.get_selected()
         if not rowiter:
             # Something is wrong, just jump to the first item in the list
@@ -102,6 +85,7 @@ class LayoutLauncher:
         dbg('Clicked for %s' % layout)
         cwd = self.terminator.origcwd or os.getcwd()
         spawn_new_terminator(cwd, ['-u', '-l', layout])
+
 
 if __name__ == '__main__':
     import util
