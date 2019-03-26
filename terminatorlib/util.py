@@ -277,7 +277,7 @@ def enumerate_descendants(parent):
         elif maker.isinstance(descendant, 'Terminal'):
             terminals.append(descendant)
 
-        while containerstmp > 0:
+        while containerstmp:
             child = containerstmp.pop(0)
             for descendant in child.get_children():
                 if maker.isinstance(descendant, 'Container'):
