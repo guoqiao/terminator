@@ -188,20 +188,20 @@ class Terminal(Gtk.VBox):
         list_length = len(profilelist)
 
         if list_length > 1:
-            if profilelist.index(self.get_profile()) + 1 == list_length:
-                self.force_set_profile(False, profilelist[0])
-            else:
-                self.force_set_profile(False, profilelist[profilelist.index(self.get_profile()) + 1])
+            current_index = profilelist.index(self.get_profile())
+            next_index = (current_index + 1) % list_length
+            assert 0 <= next_index < list_length
+            self.force_set_profile(False, next_index)
 
     def switch_to_previous_profile(self):
         profilelist = self.config.list_profiles()
         list_length = len(profilelist)
 
         if list_length > 1:
-            if profilelist.index(self.get_profile()) == 0:
-                self.force_set_profile(False, profilelist[list_length - 1])
-            else:
-                self.force_set_profile(False, profilelist[profilelist.index(self.get_profile()) - 1])
+            current_index = profilelist.index(self.get_profile())
+            prev_index = (list_length + current_index - 1) % list_length
+            assert 0 <= prev_index < list_length
+            self.force_set_profile(False, prev_index)
 
     def get_cwd(self):
         """Return our cwd"""
