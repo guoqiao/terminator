@@ -19,9 +19,6 @@ class Container(object):
 
     terminator = None
     immutable = None
-    children = None
-    config = None
-    signals = None
     signalman = None
 
     def __init__(self):
@@ -36,25 +33,21 @@ class Container(object):
         existing = GObject.signal_list_names(widget)
         for signal in self.signals:
             if signal['name'] in existing:
-                dbg('Container:: skipping signal %s for %s, already exists' % (
-                        signal['name'], widget))
+                dbg('Container:: skipping signal %s for %s, already exists' % (signal['name'], widget))
             else:
-                dbg('Container:: registering signal for %s on %s' % 
-                        (signal['name'], widget))
+                dbg('Container:: registering signal for %s on %s' % (signal['name'], widget))
                 try:
                     GObject.signal_new(signal['name'],
                                        widget,
                                        signal['flags'],
                                        signal['return_type'],
-                                        signal['param_types'])
+                                       signal['param_types'])
                 except RuntimeError:
-                    err('Container:: registering signal for %s on %s failed' %
-                            (signal['name'], widget))
+                    err('Container:: registering signal for %s on %s failed' % (signal['name'], widget))
 
     def connect_child(self, widget, signal, handler, *args):
         """Register the requested signal and record its connection ID"""
         self.cnxids.new(widget, signal, handler, *args)
-        return
 
     def disconnect_child(self, widget):
         """De-register the signals for a child"""
@@ -144,8 +137,7 @@ class Container(object):
             else:
                 self.zoom(widget, fontscale)
         except TypeError:
-            err('Container::toggle_zoom: %s is unable to handle zooming, for \
-            %s' % (self, widget))
+            err('Container::toggle_zoom: %s is unable to handle zooming, for %s' % (self, widget))
 
     def zoom(self, widget, fontscale = False):
         """Zoom a terminal"""
@@ -157,19 +149,14 @@ class Container(object):
 
     def construct_confirm_close(self, window, reqtype):
         """Create a confirmation dialog for closing things"""
-        
         # skip this dialog if applicable
         if self.config['suppress_multiple_term_dialog']:
             return Gtk.ResponseType.ACCEPT
-        
         dialog = Gtk.Dialog(_('Close?'), window, Gtk.DialogFlags.MODAL)
         dialog.set_resizable(False)
-    
         dialog.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT)
         c_all = dialog.add_button(Gtk.STOCK_CLOSE, Gtk.ResponseType.ACCEPT)
-        c_all.get_children()[0].get_children()[0].get_children()[1].set_label(
-                _('Close _Terminals'))
-    
+        c_all.get_children()[0].get_children()[0].get_children()[1].set_label(_('Close _Terminals'))
         primary = Gtk.Label(label=_('<big><b>Close multiple terminals?</b></big>'))
         primary.set_use_markup(True)
         primary.set_alignment(0, 0.5)
@@ -183,15 +170,13 @@ the tab will also close all terminals within it.')
             label_text = ''
         secondary = Gtk.Label(label=label_text)
         secondary.set_line_wrap(True)
-                    
+
         labels = Gtk.VBox()
         labels.pack_start(primary, False, False, 6)
         labels.pack_start(secondary, False, False, 6)
-    
-        image = Gtk.Image.new_from_stock(Gtk.STOCK_DIALOG_WARNING,
-                                         Gtk.IconSize.DIALOG)
+        image = Gtk.Image.new_from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.DIALOG)
         image.set_alignment(0.5, 0)
-    
+
         box = Gtk.HBox()
         box.pack_start(image, False, False, 6)
         box.pack_start(labels, False, False, 6)
@@ -199,18 +184,15 @@ the tab will also close all terminals within it.')
 
         checkbox = Gtk.CheckButton(_("Do not show this message next time"))
         dialog.vbox.pack_end(checkbox, True, True, 0)
-    
         dialog.show_all()
 
         result = dialog.run()
-        
         # set configuration
         self.config.base.reload()
         self.config['suppress_multiple_term_dialog'] = checkbox.get_active()
         self.config.save()
 
         dialog.destroy()
-                
         return(result)
 
     def propagate_title_change(self, widget, title):
@@ -265,13 +247,13 @@ the tab will also close all terminals within it.')
             if hasattr(position, '__iter__'):
                 position = ':'.join([str(x) for x in position])
             layout['position'] = position
-        
+
         if hasattr(self, 'ismaximised'):
             layout['maximised'] = self.ismaximised
-        
+
         if hasattr(self, 'isfullscreen'):
             layout['fullscreen'] = self.isfullscreen
-        
+
         if hasattr(self, 'ratio'):
             layout['ratio'] = self.ratio
 
@@ -297,10 +279,7 @@ the tab will also close all terminals within it.')
                 layout['last_active_term'] = self.last_active_term
 
         if mytype == 'Window':
-            if self.uuid == self.terminator.last_active_window:
-                layout['last_active_window'] = True
-            else:
-                layout['last_active_window'] = False
+            layout['last_active_window'] = (self.uuid == self.terminator.last_active_window)
 
         name = 'child%d' % count
         count = count + 1
@@ -318,6 +297,3 @@ the tab will also close all terminals within it.')
     def create_layout(self, layout):
         """Apply settings for our layout"""
         raise NotImplementedError('create_layout')
-
-
-# vim: set expandtab ts=4 sw=4:
