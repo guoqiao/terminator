@@ -23,6 +23,8 @@ import uuid
 import inspect
 import subprocess
 
+from loguru import logger
+
 import cairo
 
 try:
@@ -43,38 +45,10 @@ DEBUGCLASSES = []
 DEBUGMETHODS = []
 
 def dbg(log=""):
-    """Print a message if debugging is enabled"""
-    if DEBUG:
-        stackitem = inspect.stack()[1]
-        parent_frame = stackitem[0]
-        method = parent_frame.f_code.co_name
-        names, varargs, keywords, local_vars = inspect.getargvalues(parent_frame)
-        try:
-            self_name = names[0]
-            classname = local_vars[self_name].__class__.__name__
-        except IndexError:
-            classname = "noclass"
-        if DEBUGFILES:
-            line = stackitem[2]
-            filename = parent_frame.f_code.co_filename
-            extra = " (%s:%s)" % (filename, line)
-        else:
-            extra = ""
-        if DEBUGCLASSES != [] and classname not in DEBUGCLASSES:
-            return
-        if DEBUGMETHODS != [] and method not in DEBUGMETHODS:
-            return
-        try:
-            print("%s::%s: %s%s" % (classname, method, log, extra), file=sys.stderr)
-        except IOError:
-            pass
+    logger.debug(log)
 
 def err(log = ""):
-    """Print an error message"""
-    try:
-        print(log, file=sys.stderr)
-    except IOError:
-        pass
+    logger.error(log)
 
 def gerr(message = None):
     """Display a graphical error. This should only be used for serious
