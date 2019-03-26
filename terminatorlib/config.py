@@ -593,8 +593,6 @@ class ConfigBase(Borg):
         configspecdata['plugins'] = {}
 
         configspec = ConfigObj(configspecdata)
-        if DEBUG == True:
-            configspec.write(open('/tmp/terminator_configspec_debug.txt', 'w'))
         return(configspec)
 
 
