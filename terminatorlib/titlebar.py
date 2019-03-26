@@ -102,6 +102,14 @@ class Titlebar(Gtk.EventBox):
         """Connect the supplied function to clicking on the group icon"""
         self.ebox.connect('button-press-event', func)
 
+    def get_title_font(self):
+        title_font = None
+        if not self.config['title_use_system_font']:
+            title_font = self.config['title_font']
+        if not title_font:
+            title_font = self.config.get_system_prop_font()
+        return title_font
+
     def update(self, other=None):
         """Update our contents"""
         default_bg = False
@@ -110,10 +118,7 @@ class Titlebar(Gtk.EventBox):
         else:
             self.label.set_text("%s %s" % (self.termtext, self.sizetext))
 
-        if (not self.config['title_use_system_font']) and self.config['title_font']:
-            title_font = Pango.FontDescription(self.config['title_font'])
-        else:
-            title_font = Pango.FontDescription(self.config.get_system_prop_font())
+        title_font = Pango.FontDescription(self.get_title_font())
         self.label.modify_font(title_font)
         self.grouplabel.modify_font(title_font)
 
