@@ -74,14 +74,22 @@ KeyError: 'ConfigBase::get_item: unknown key algo'
 import os
 import platform
 from copy import copy
+from loguru import logger
 
 from gi.repository import Gio
 
 from .borg import Borg
 from .configobj.configobj import ConfigObj, flatten_errors
 from .configobj.validate import Validator
-from .util import dbg, err, DEBUG, get_config_dir, dict_diff
+from .util import get_config_dir, dict_diff
 from . import optionparse
+
+
+def dbg(*args, **kwargs):
+    logger.debug(*args, **kwargs)
+
+def err(*args, **kwargs):
+    logger.debug(*args, **kwargs)
 
 DEFAULTS = {
         'global_config':   {
