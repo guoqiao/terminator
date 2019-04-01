@@ -22,7 +22,6 @@ import os
 from optparse import OptionParser, SUPPRESS_HELP
 from .util import dbg, err
 from . import util
-from . import config
 from . import version
 from .translation import _
 
@@ -136,12 +135,6 @@ icon for the window (by file or name)'))
             err('OptionParse::parse_options: %s does not exist' %
                     options.working_directory)
             options.working_directory = ''
-
-    configobj = config.Config()
-    if options.profile and options.profile not in configobj.list_profiles():
-        options.profile = None
-
-    configobj.options_set(options)
 
     dbg('OptionParse::parse_options: command line options: %s' % options)
 

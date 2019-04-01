@@ -8,7 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GObject, GLib, Gtk, Gdk
 
 from .translation import _
-from .config import Config
+from .config import CONFIG
 
 # pylint: disable-msg=R0904
 class Searchbar(Gtk.HBox):
@@ -33,7 +33,7 @@ class Searchbar(Gtk.HBox):
         """Class initialiser"""
         GObject.GObject.__init__(self)
 
-        self.config = Config()
+        self.config = CONFIG
 
         self.get_style_context().add_class("terminator-terminal-searchbar")
 

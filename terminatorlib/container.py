@@ -8,7 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GObject, Gtk
 
 from .factory import Factory
-from .config import Config
+from .config import CONFIG
 from .util import dbg, err
 from .translation import _
 from .signalman import Signalman
@@ -26,7 +26,7 @@ class Container(object):
         self.children = []
         self.signals = []
         self.cnxids = Signalman()
-        self.config = Config()
+        self.config = CONFIG
 
     def register_signals(self, widget):
         """Register gobject signals in a way that avoids multiple inheritance"""

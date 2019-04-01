@@ -12,11 +12,10 @@ from dbus.exceptions import DBusException
 import dbus.glib
 from borg import Borg
 from terminator import Terminator
-from config import Config
+from config import CONFIG
 from factory import Factory
 from util import dbg,  enumerate_descendants
 
-CONFIG = Config()
 if not CONFIG['dbus']:
     # The config says we are not to load dbus, so pretend like we can't
     dbg('dbus disabled')

@@ -26,7 +26,7 @@
 import sys
 import os
 from . import borg
-from .config import Config
+from .config import CONFIG
 from .util import dbg, err, get_config_dir
 from .terminator import Terminator
 
@@ -68,7 +68,7 @@ class PluginRegistry(borg.Borg):
             dbg('PluginRegistry::load_plugins: Already loaded')
             return
 
-        config = Config()
+        config = CONFIG
 
         for plugindir in self.path:
             if not os.path.isdir(plugindir):

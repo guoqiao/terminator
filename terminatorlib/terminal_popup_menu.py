@@ -13,7 +13,7 @@ from .translation import _
 from .encoding import TerminatorEncoding
 from .terminator import Terminator
 from .util import err, dbg
-from .config import Config
+from .config import CONFIG
 from .prefseditor import PrefsEditor
 from . import plugin
 
@@ -27,7 +27,7 @@ class TerminalPopupMenu(object):
         """Class initialiser"""
         self.terminal = terminal
         self.terminator = Terminator()
-        self.config = Config()
+        self.config = CONFIG
 
     def show(self, widget, event=None):
         """Display the context menu"""

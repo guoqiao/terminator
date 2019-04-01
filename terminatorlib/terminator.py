@@ -14,7 +14,7 @@ from gi.repository.GLib import GError
 
 from . import borg
 from .borg import Borg
-from .config import Config
+from .config import CONFIG
 from .keybindings import Keybindings
 from .util import dbg, err, enumerate_descendants
 from .factory import Factory
@@ -85,7 +85,7 @@ class Terminator(Borg):
         if not self.groups:
             self.groups = []
         if not self.config:
-            self.config = Config()
+            self.config = CONFIG
         if self.groupsend == None:
             self.groupsend = self.groupsend_type[self.config['broadcast_default']]
         if not self.keybindings:

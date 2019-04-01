@@ -8,7 +8,7 @@ import gi
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from terminatorlib.config import Config
+from terminatorlib.config import CONFIG
 import terminatorlib.plugin as plugin
 from terminatorlib.translation import _
 from terminatorlib.util import err, dbg
@@ -24,7 +24,7 @@ try:
 except (ImportError, ValueError):
     err('ActivityWatch plugin unavailable as we cannot import Notify')
 
-config = Config()
+config = CONFIG
 inactive_period = float(config.plugin_get('InactivityWatch', 'inactive_period',
                                         10.0))
 watch_interval = int(config.plugin_get('InactivityWatch', 'watch_interval',

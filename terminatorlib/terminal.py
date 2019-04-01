@@ -15,7 +15,7 @@ from gi.repository import GLib, GObject, Pango, Gtk, Gdk, Vte
 
 from .util import dbg, err, spawn_new_terminator, make_uuid, manual_lookup, display_manager
 from . import util
-from .config import Config
+from .config import CONFIG
 from .cwd import get_default_cwd
 from .factory import Factory
 from .terminator import Terminator
@@ -114,7 +114,7 @@ class Terminal(Gtk.VBox):
         self.matches = {}
         self.cnxids = Signalman()
 
-        self.config = Config()
+        self.config = CONFIG
 
         self.cwd = get_default_cwd()
         self.origcwd = self.terminator.origcwd

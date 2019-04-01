@@ -12,7 +12,7 @@ if __name__ == '__main__':
 from gi.repository import Gtk
 from gi.repository import GObject
 import terminatorlib.plugin as plugin
-from terminatorlib.config import Config
+from terminatorlib.config import CONFIG
 from terminatorlib.translation import _
 from terminatorlib.util import get_config_dir, err, dbg, gerr
 
@@ -28,7 +28,7 @@ class CustomCommandsMenu(plugin.MenuItem):
     conf_file = os.path.join(get_config_dir(),"custom_commands")
 
     def __init__( self):
-      config = Config()
+      config = CONFIG
       sections = config.plugin_get_config(self.__class__.__name__)
       if not isinstance(sections, dict):
           return

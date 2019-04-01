@@ -78,7 +78,6 @@ from loguru import logger
 
 from gi.repository import Gio
 
-from .borg import Borg
 from .configobj.configobj import ConfigObj, flatten_errors
 from .configobj.validate import Validator
 from .util import get_config_dir, dict_diff
@@ -481,7 +480,7 @@ class Config(object):
         """Set a layout"""
         return(self.base.set_layout(layout, tree))
 
-class ConfigBase(Borg):
+class ConfigBase():
     """Class to provide access to our user configuration"""
     loaded = None
     whined = None
@@ -496,10 +495,7 @@ class ConfigBase(Borg):
     def __init__(self):
         """Class initialiser"""
 
-        Borg.__init__(self, self.__class__.__name__)
-
         self.prepare_attributes()
-        from . import optionparse
         self.command_line_options = optionparse.options
         self.load()
 
@@ -804,3 +800,7 @@ class ConfigBase(Borg):
         """Set a layout"""
         self.layouts[layout] = tree
 
+# singleton instance
+CONFIG = Config()
+
+__all__ = ['CONFIG']

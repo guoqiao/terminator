@@ -9,7 +9,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GObject, Gtk, Gdk, Gio
 
 from .terminator import Terminator
-from .config import Config
+from .config import CONFIG
 from .factory import Factory
 from .container import Container
 from .editablelabel import EditableLabel
@@ -548,7 +548,7 @@ class TabLabel(Gtk.HBox):
 
         self.notebook = notebook
         self.terminator = Terminator()
-        self.config = Config()
+        self.config = CONFIG
 
         self.label = EditableLabel(title)
         self.update_angle()
