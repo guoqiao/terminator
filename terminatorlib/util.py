@@ -24,6 +24,7 @@ import inspect
 import subprocess
 
 from loguru import logger
+logger.add('/tmp/terminator-{time}.log')
 
 import cairo
 
