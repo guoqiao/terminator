@@ -14,7 +14,7 @@ from .util import dbg, err, spawn_new_terminator
 from . import config
 from .translation import _
 from .terminator import Terminator
-from .plugin import PluginRegistry
+
 
 class LayoutLauncher:
 

@@ -24,8 +24,10 @@ from .terminal_popup_menu import TerminalPopupMenu
 from .searchbar import Searchbar
 from .translation import _
 from .signalman import Signalman
-from . import plugin
+from .plugin import PLUGIN_REGISTRY
 from .layoutlauncher import LayoutLauncher
+
+registry = PLUGIN_REGISTRY
 
 # pylint: disable-msg=R0904
 class Terminal(Gtk.VBox):
@@ -281,7 +283,6 @@ class Terminal(Gtk.VBox):
 
             # Now add any matches from plugins
             try:
-                registry = plugin.PluginRegistry()
                 registry.load_plugins()
                 plugins = registry.get_plugins_by_capability('url_handler')
 
@@ -1410,7 +1411,6 @@ class Terminal(Gtk.VBox):
         elif match in self.matches.values():
             # We have a match, but it's not a hard coded one, so it's a plugin
             try:
-                registry = plugin.PluginRegistry()
                 registry.load_plugins()
                 plugins = registry.get_plugins_by_capability('url_handler')
 

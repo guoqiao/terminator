@@ -15,7 +15,8 @@ from .terminator import Terminator
 from .util import err, dbg
 from .config import CONFIG
 from .prefseditor import PrefsEditor
-from . import plugin
+from .plugin import PLUGIN_REGISTRY
+
 
 class TerminalPopupMenu(object):
     """Class implementing the Terminal context menu"""
@@ -70,9 +71,8 @@ class TerminalPopupMenu(object):
                         break
 
                 dbg("Found match ID (%d) in terminal.matches plugin %s" % (url[1], pluginname))
-                registry = plugin.PluginRegistry()
-                registry.load_plugins()
-                plugins = registry.get_plugins_by_capability('url_handler')
+                PLUGIN_REGISTRY.load_plugins()
+                plugins = PLUGIN_REGISTRY.get_plugins_by_capability('url_handler')
                 for urlplugin in plugins:
                     if urlplugin.handler_name == pluginname:
                         dbg("Identified matching plugin: %s" %
@@ -217,9 +217,8 @@ class TerminalPopupMenu(object):
         self.add_encoding_items(menu)
 
         menuitems = []
-        registry = plugin.PluginRegistry()
-        registry.load_plugins()
-        plugins = registry.get_plugins_by_capability('terminal_menu')
+        PLUGIN_REGISTRY.load_plugins()
+        plugins = PLUGIN_REGISTRY.get_plugins_by_capability('terminal_menu')
         for menuplugin in plugins:
             menuplugin.callback(menuitems, menu, terminal)
         if menuitems:

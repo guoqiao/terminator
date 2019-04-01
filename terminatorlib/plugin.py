@@ -25,7 +25,6 @@
 
 import sys
 import os
-from . import borg
 from .config import CONFIG
 from .util import dbg, err, get_config_dir
 from .terminator import Terminator
@@ -42,7 +41,7 @@ class Plugin(object):
         """Prepare to be unloaded"""
         pass
 
-class PluginRegistry(borg.Borg):
+class PluginRegistry():
     """Definition of a class to store plugin instances"""
     available_plugins = {}
     instances = {}
@@ -51,13 +50,12 @@ class PluginRegistry(borg.Borg):
 
     def __init__(self):
         """Class initialiser"""
-        borg.Borg.__init__(self, self.__class__.__name__)
         self.prepare_attributes()
 
     def prepare_attributes(self):
         """Prepare our attributes"""
         if not self.path:
-            (head, _tail) = os.path.split(borg.__file__)
+            (head, _tail) = os.path.split(__file__)
             self.path.append(os.path.join(head, 'plugins'))
             self.path.append(os.path.join(get_config_dir(), 'plugins'))
             dbg('PluginRegistry::prepare_attributes: Plugin path: %s' % self.path)
@@ -177,3 +175,5 @@ class MenuItem(Plugin):
         """Callback to transform the enclosed URL"""
         raise NotImplementedError
 
+
+PLUGIN_REGISTRY = PluginRegistry()

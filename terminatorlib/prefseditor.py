@@ -20,7 +20,7 @@ from .keybindings import Keybindings, KeymapError
 from .translation import _
 from .encoding import TerminatorEncoding
 from .terminator import Terminator
-from .plugin import PluginRegistry
+from .plugin import PLUGIN_REGISTRY
 from .version import APP_NAME
 
 def color2hex(widget):
@@ -389,7 +389,7 @@ class PrefsEditor:
         # Populate the plugin list
         widget = guiget('pluginlist')
         liststore = widget.get_model()
-        self.registry = PluginRegistry()
+        self.registry = PLUGIN_REGISTRY
         self.pluginiters = {}
         pluginlist = self.registry.get_available_plugins()
         self.plugins = {}
