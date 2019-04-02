@@ -21,88 +21,43 @@ from .factory import Factory
 from .cwd import get_pid_cwd
 from .version import APP_NAME, APP_VERSION
 
-def eventkey2gdkevent(eventkey):  # FIXME FOR GTK3: is there a simpler way of casting from specific EventKey to generic (union) GdkEvent?
+
+def eventkey2gdkevent(eventkey):
     gdkevent = Gdk.Event.new(eventkey.type)
-    gdkevent.key.window = eventkey.window
-    gdkevent.key.send_event = eventkey.send_event
-    gdkevent.key.time = eventkey.time
-    gdkevent.key.state = eventkey.state
-    gdkevent.key.keyval = eventkey.keyval
-    gdkevent.key.length = eventkey.length
-    gdkevent.key.string = eventkey.string
-    gdkevent.key.hardware_keycode = eventkey.hardware_keycode
-    gdkevent.key.group = eventkey.group
-    gdkevent.key.is_modifier = eventkey.is_modifier
+    for name in ['window', 'send_event', 'time', 'state', 'keyval', 'length', 'string', 'hardware_keycode', 'group', 'is_modifier']:
+        setattr(gdkevent.key, name, getattr(eventkey, name))
     return gdkevent
 
-class Terminator(Borg):
-    """master object for the application"""
 
-    windows = None
-    launcher_windows = None
-    windowtitle = None
-    terminals = None
-    groups = None
-    config = None
-    keybindings = None
-    style_providers = None
-    last_focused_term = None
-
-    origcwd = None
-    dbus_path = None
-    dbus_name = None
-    pid_cwd = None
-    gnome_client = None
-    debug_address = None
-    ibus_running = None
-
-    doing_layout = None
-    layoutname = None
-    last_active_window = None
-    prelayout_windows = None
-
-    groupsend = None
-    groupsend_type = {'all': 0, 'group': 1, 'off': 2}
-
-    cur_gtk_theme_name = None
-    gtk_settings = None
-
+class Terminator:
     def __init__(self):
-        """Class initialiser"""
+        self.windows = []
+        self.launcher_windows = []
+        self.terminals = []
+        self.groups = []
+        self.config = CONFIG
 
-        Borg.__init__(self, self.__class__.__name__)
-        self.prepare_attributes()
+        self.groupsend_type = {'all': 0, 'group': 1, 'off': 2}
+        self.groupsend = self.groupsend_type[CONFIG['broadcast_default']]
 
-    def prepare_attributes(self):
-        """Initialise anything that isn't already"""
+        self.keybindings = Keybindings()
+        self.keybindings.configure(CONFIG['keybindings'])
 
-        if not self.windows:
-            self.windows = []
-        if not self.launcher_windows:
-            self.launcher_windows = []
-        if not self.terminals:
-            self.terminals = []
-        if not self.groups:
-            self.groups = []
-        if not self.config:
-            self.config = CONFIG
-        if self.groupsend == None:
-            self.groupsend = self.groupsend_type[self.config['broadcast_default']]
-        if not self.keybindings:
-            self.keybindings = Keybindings()
-            self.keybindings.configure(self.config['keybindings'])
-        if not self.style_providers:
-            self.style_providers = []
-        if not self.doing_layout:
-            self.doing_layout = False
-        if not self.pid_cwd:
-            self.pid_cwd = get_pid_cwd()
-        if self.gnome_client is None:
-            self.attempt_gnome_client()
-        self.connect_signals()
+        self.last_focused_term = None
+        self.style_providers = []
+        self.doing_layout = False
 
-    def connect_signals(self):
-        """Connect all the gtk signals"""
+        self.dbus_path = None
+        self.dbus_name = None
+        self.debug_address = None
+        self.ibus_running = None
+
+        self.origcwd = None
+        self.pid_cwd = get_pid_cwd()
+
+        self.gnome_client = None
+        self.attempt_gnome_client()
+
         self.gtk_settings = Gtk.Settings().get_default()
         self.gtk_settings.connect('notify::gtk-theme-name', self.on_gtk_theme_name_notify)
         self.cur_gtk_theme_name = self.gtk_settings.get_property('gtk-theme-name')
@@ -195,7 +150,11 @@ class Terminator(Borg):
     def deregister_terminal(self, terminal):
         """De-register a terminal widget"""
         dbg('Terminator::deregister_terminal: de-registering %s:%s' % (id(terminal), type(terminal)))
-        self.terminals.remove(terminal)
+        try:
+            self.terminals.remove(terminal)
+        except ValueError:
+            err('Fail to remove terminal %s' % terminal)
+            pass
 
         if len(self.terminals) == 0:
             dbg('no terminals remain, destroying all windows')
